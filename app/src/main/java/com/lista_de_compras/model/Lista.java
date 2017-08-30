@@ -5,4 +5,5 @@ package com.lista_de_compras.model;
  */
 
 public class Lista {
+    List<Produto> produtos;
 }
