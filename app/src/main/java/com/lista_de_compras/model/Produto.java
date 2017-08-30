@@ -9,5 +9,4 @@ public class Produto {
     String nome;
     CategoriaDeProduto categoria;
     double valor;
-    String felipao;
 }
