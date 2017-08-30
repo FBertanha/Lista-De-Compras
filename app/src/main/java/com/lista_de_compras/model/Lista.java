@@ -1,5 +1,8 @@
 package com.lista_de_compras.model;
 
+
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -7,5 +10,10 @@ import java.util.List;
  */
 
 public class Lista {
+    int codigo;
+    CategoriaDeLista categoria;
     List<Produto> produtos;
+    String nome;
+    Date dataCriacao;
+    Date dataCompra;
 }

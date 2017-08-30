@@ -5,4 +5,8 @@ package com.lista_de_compras.model;
  */
 
 public class Produto {
+    int codigo;
+    String nome;
+    CategoriaDeProduto categoria;
+    double valor;
 }
