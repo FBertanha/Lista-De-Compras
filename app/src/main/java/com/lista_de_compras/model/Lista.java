@@ -15,6 +15,7 @@ public class Lista {
     private Date dataCriacao;
     private Date dataCompra;
 
+
     public int getCodigo() {
         return codigo;
     }
