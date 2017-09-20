@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lista_de_compras.activity.ProdutoCadastroActivity">
+
+    <EditText
+        android:id="@+id/editText_nome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:layout_marginStart="8dp"
+        tools:layout_editor_absoluteY="15dp"
+        tools:layout_editor_absoluteX="89dp" />
+
+    <Spinner
+        android:id="@+id/spinner_categoria"
+        android:layout_width="215dp"
+        android:layout_height="34dp"
+        tools:layout_editor_absoluteY="72dp"
+        tools:layout_editor_absoluteX="85dp" />
+
+    <EditText
+        android:id="@+id/editText_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        tools:layout_editor_absoluteY="114dp"
+        tools:layout_editor_absoluteX="85dp" />
+
+    <Button
+        android:id="@+id/button_gravar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/produto_cadastro_button_gravar"
+        tools:layout_editor_absoluteY="165dp"
+        app:layout_constraintRight_toLeftOf="@+id/button_limpar"
+        android:layout_marginRight="8dp" />
+
+    <Button
+        android:id="@+id/button_limpar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Limpar"
+        tools:layout_editor_absoluteY="165dp"
+        tools:layout_editor_absoluteX="216dp" />
+</android.support.constraint.ConstraintLayout>
