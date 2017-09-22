@@ -71,6 +71,8 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         }
 
         Toast.makeText(this, "Produto salvo com sucesso!", Toast.LENGTH_SHORT).show();
+
+        finish();
     }
 
     private void carregarViewComponents() {

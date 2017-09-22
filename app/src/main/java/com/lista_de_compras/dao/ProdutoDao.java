@@ -63,7 +63,7 @@ public class ProdutoDao extends SQLiteOpenHelper {
 
         String[] whereArgs = new String[]{String.valueOf(codigo)};
 
-        db.delete("produtos", "id = ?", whereArgs);
+        db.delete("produtos", "codigo = ?", whereArgs);
     }
 
     public List<Produto> todos() {
