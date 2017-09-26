@@ -61,9 +61,19 @@ public class ProdutoActivity extends AppCompatActivity {
         //Pega produto selecionado
         final Produto produto = (Produto) listViewProdutos.getItemAtPosition(info.position);
 
+        MenuItem menuEditar = menu.add(R.string.menu_activity_produto_editar);
+        menuEditar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(ProdutoActivity.this, ProdutoCadastroActivity.class);
+                intent.putExtra("produto", produto);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         //Monta menu de contexto
         MenuItem menuExcluir = menu.add(R.string.menu_activity_produto_excluir);
-
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

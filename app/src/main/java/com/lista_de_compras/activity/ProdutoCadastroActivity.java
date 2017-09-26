@@ -46,7 +46,7 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         editTextDescricao.setText(produto.getDescricao());
         editTextValor.setText(String.valueOf(produto.getValor()));
         // TODO
-        spinnerCategoria.setSelection(1);
+        //spinnerCategoria.setSelection(1);
     }
 
     private void pegarProdutoDoFormulario() {
