@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lista_de_compras.R;
+import com.lista_de_compras.adapter.ProdutoAdapter;
 import com.lista_de_compras.dao.ProdutoDao;
 import com.lista_de_compras.model.Produto;
 
@@ -100,9 +101,11 @@ public class ProdutoActivity extends AppCompatActivity {
     private void carregarProdutosNoListView() {
         ProdutoDao produtoDao = new ProdutoDao(this);
         List<Produto> todosProdutos = produtoDao.todos();
-        ArrayAdapter<Produto> produtoArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, todosProdutos);
 
-        listViewProdutos.setAdapter(produtoArrayAdapter);
+        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
+        //ArrayAdapter<Produto> produtoArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, todosProdutos);
+
+        listViewProdutos.setAdapter(produtoAdapter);
     }
 
     @Override
