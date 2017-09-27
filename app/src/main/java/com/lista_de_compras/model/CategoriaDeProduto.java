@@ -1,10 +1,12 @@
 package com.lista_de_compras.model;
 
+import java.io.Serializable;
+
 /**
  * Created by evely on 30/08/2017.
  */
 
-public class CategoriaDeProduto {
+public class CategoriaDeProduto implements Serializable{
     private int codigo;
     private String nome;
 

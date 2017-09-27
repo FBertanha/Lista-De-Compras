@@ -23,7 +23,9 @@
             android:name=".activity.ProdutoActivity"
             android:label="@string/title_activity_produto"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.ProdutoCadastroActivity"></activity>
+        <activity
+            android:name=".activity.ProdutoCadastroActivity"
+            android:label="@string/title_activity_produto_cadastro" />
     </application>
 
 </manifest>

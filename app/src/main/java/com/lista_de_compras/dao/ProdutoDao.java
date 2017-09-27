@@ -22,11 +22,14 @@ public class ProdutoDao extends SQLiteOpenHelper {
         super(context, "lista_de_compras", null, 1);
     }
 
+
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE produtos (" +
-                "codigo INT PRIMARY KEY, AUTOINCREMENT," +
-                "nome VARCHAR(255) NOT NULL," +
+                "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "descricao VARCHAR(255) NOT NULL," +
                 "categoria INT NOT NULL," +
                 "valor DOUBLE);";
 
@@ -60,7 +63,7 @@ public class ProdutoDao extends SQLiteOpenHelper {
 
         String[] whereArgs = new String[]{String.valueOf(codigo)};
 
-        db.delete("produtos", "id = ?", whereArgs);
+        db.delete("produtos", "codigo = ?", whereArgs);
     }
 
     public List<Produto> todos() {
@@ -85,9 +88,12 @@ public class ProdutoDao extends SQLiteOpenHelper {
             Produto produto = new Produto();
 
             produto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-            produto.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            produto.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
             //TODO chave estrangeira CategoriaDeProduto
-            produto.setCategoria(new CategoriaDeProduto());
+            CategoriaDeProduto categoriaDeProduto = new CategoriaDeProduto();
+            categoriaDeProduto.setCodigo(1);
+            categoriaDeProduto.setNome("Batata");
+            produto.setCategoria(categoriaDeProduto);
             produto.setValor(cursor.getDouble(cursor.getColumnIndex("valor")));
 
             //Adiciona produto no ArrayList
@@ -101,8 +107,8 @@ public class ProdutoDao extends SQLiteOpenHelper {
         ContentValues dados = new ContentValues();
 
         dados.put("codigo", produto.getCodigo());
-        dados.put("nome", produto.getNome());
-        dados.put("categoria", produto.getCodigo());
+        dados.put("descricao", produto.getDescricao());
+        dados.put("categoria", produto.getCategoria().getCodigo());
         dados.put("valor", produto.getValor());
 
         return dados;
