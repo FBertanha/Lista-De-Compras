@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Carol on 13/09/2017.
+ * Created by Carolina on 13/09/2017.
  */
 
 public class ProdutoDAO extends SQLiteOpenHelper {
