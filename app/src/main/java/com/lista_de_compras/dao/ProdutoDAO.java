@@ -16,9 +16,9 @@ import java.util.List;
  * Created by Felipe on 13/09/2017.
  */
 
-public class ProdutoDao extends SQLiteOpenHelper {
+public class ProdutoDAO extends SQLiteOpenHelper {
 
-    public ProdutoDao(Context context) {
+    public ProdutoDAO(Context context) {
         super(context, "lista_de_compras", null, 1);
     }
 

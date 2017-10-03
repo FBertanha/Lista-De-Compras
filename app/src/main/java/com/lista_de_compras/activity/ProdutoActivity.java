@@ -11,12 +11,11 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lista_de_compras.R;
 import com.lista_de_compras.adapter.ProdutoAdapter;
-import com.lista_de_compras.dao.ProdutoDao;
+import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.Produto;
 
 import java.util.List;
@@ -86,7 +85,7 @@ public class ProdutoActivity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new ProdutoDao(ProdutoActivity.this).excluir(produto.getCodigo());
+                                new ProdutoDAO(ProdutoActivity.this).excluir(produto.getCodigo());
                                 carregarProdutosNoListView();
                             }
                         })
@@ -99,8 +98,8 @@ public class ProdutoActivity extends AppCompatActivity {
     }
 
     private void carregarProdutosNoListView() {
-        ProdutoDao produtoDao = new ProdutoDao(this);
-        List<Produto> todosProdutos = produtoDao.todos();
+        ProdutoDAO produtoDAO = new ProdutoDAO(this);
+        List<Produto> todosProdutos = produtoDAO.todos();
 
         ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
         //ArrayAdapter<Produto> produtoArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, todosProdutos);

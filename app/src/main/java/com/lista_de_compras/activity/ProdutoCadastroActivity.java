@@ -12,7 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lista_de_compras.R;
-import com.lista_de_compras.dao.ProdutoDao;
+import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.CategoriaDeProduto;
 import com.lista_de_compras.model.Produto;
 
@@ -61,7 +61,7 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
     }
 
     private void salvar() {
-        ProdutoDao produtoDAO = new ProdutoDao(this);
+        ProdutoDAO produtoDAO = new ProdutoDAO(this);
         pegarProdutoDoFormulario();
         //Se o produto ja tiver um código (diferente de zero) ele está sendo editado, caso contrário é um produto novo
         if(produto.getCodigo() != null) {
