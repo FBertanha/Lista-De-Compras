@@ -13,17 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Carolina on 13/09/2017.
+ * Created by Felipe on 13/09/2017.
  */
 
 public class ProdutoDAO extends SQLiteOpenHelper {
+    private Context context;
 
     public ProdutoDAO(Context context) {
         super(context, "lista_de_compras", null, 1);
+        this.context = context;
     }
-
-
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -77,7 +76,6 @@ public class ProdutoDAO extends SQLiteOpenHelper {
 
         produtos = getProdutosDoCursor(cursor);
 
-
         return produtos;
     }
 
@@ -90,10 +88,11 @@ public class ProdutoDAO extends SQLiteOpenHelper {
             produto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
             produto.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
             //TODO chave estrangeira CategoriaDeProduto
-            CategoriaDeProduto categoriaDeProduto = new CategoriaDeProduto();
-            categoriaDeProduto.setCodigo(1);
-            categoriaDeProduto.setNome("Batata");
-            produto.setCategoria(categoriaDeProduto);
+//            CategoriaDeProduto categoriaDeProduto = new CategoriaDeProduto();
+//            categoriaDeProduto.setCodigo(1);
+//            categoriaDeProduto.setNome("Batata");
+            //CategoriaDeProdutoDAO categoriaDeProdutoDAO = new CategoriaDeProdutoDAO(context).pegarPorCodigo(produto.getCategoria());
+            //produto.setCategoria(categoriaDeProduto);
             produto.setValor(cursor.getDouble(cursor.getColumnIndex("valor")));
 
             //Adiciona produto no ArrayList
@@ -105,13 +104,10 @@ public class ProdutoDAO extends SQLiteOpenHelper {
 
     private ContentValues getDadosProduto(Produto produto) {
         ContentValues dados = new ContentValues();
-
         dados.put("codigo", produto.getCodigo());
         dados.put("descricao", produto.getDescricao());
         dados.put("categoria", produto.getCategoria().getCodigo());
         dados.put("valor", produto.getValor());
-
         return dados;
-
     }
 }

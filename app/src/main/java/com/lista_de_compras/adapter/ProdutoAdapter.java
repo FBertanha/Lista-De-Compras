@@ -54,13 +54,13 @@ public class ProdutoAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.produto_list_item, parent, false);
         }
 
-        ImageView imageViewFoto = (ImageView) view.findViewById(R.id.imageView_foto);
+        //ImageView imageViewFoto = (ImageView) view.findViewById(R.id.imageView_foto);
         TextView textViewDescricao = (TextView) view.findViewById(R.id.textView_descricao);
         TextView textViewCategoria = (TextView) view.findViewById(R.id.textView_categoria);
         TextView textViewValor = (TextView) view.findViewById(R.id.textView_valor);
 
         textViewDescricao.setText(produto.getDescricao());
-        textViewCategoria.setText(produto.getCategoria().getNome());
+        //textViewCategoria.setText(produto.getCategoria().getNome());
         textViewValor.setText(String.valueOf(produto.getValor()));
 
         return view;

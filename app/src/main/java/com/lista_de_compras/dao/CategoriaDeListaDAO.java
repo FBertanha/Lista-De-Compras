@@ -21,7 +21,7 @@ public class CategoriaDeListaDAO extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db){
         String sql = "CREATE TABLE CategoriaDeLista(" +
-                "codigo INT PRIMARY KEY, AUTOINCREMENT," +
+                "codigo INT PRIMARY KEY AUTOINCREMENT," +
                 "nome VARCHAR(255) NOT NULL)";
 
         db.execSQL(sql);

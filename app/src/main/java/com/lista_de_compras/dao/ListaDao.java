@@ -26,7 +26,7 @@ public class ListaDao extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE listas (" +
-                "codigo INT PRIMARY KEY, AUTOINCREMENT," +
+                "codigo INT PRIMARY KEY AUTOINCREMENT," +
                 "categoria int NOT NULL," +
                 "produtos   NOT NULL," +
                 "nome VARCHAR(255) NOT NULL," +
