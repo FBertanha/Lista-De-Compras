@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lista_de_compras.R;
+import com.lista_de_compras.model.CategoriaDeProduto;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, ProdutoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_menu_categoria_produtos) {
+            Intent intent = new Intent(this, CategoriaDeProdutoActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_menu_categoria_listas) {
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bertanha.myhome.GpioFormActivity">
     <item
-        android:id="@+id/produto_cadastro_menu"
+        android:id="@+id/salvar_cadastro_menu"
         android:orderInCategory="100"
         android:title="Salvar"
         android:icon="@drawable/ic_check_24dp"

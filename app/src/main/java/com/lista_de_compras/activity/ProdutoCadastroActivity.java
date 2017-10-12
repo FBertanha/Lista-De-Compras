@@ -94,10 +94,12 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.activity_produto_cadastro_menu, menu);
+        menuInflater.inflate(R.menu.activity_cadastro_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -108,7 +110,7 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.produto_cadastro_menu:
+            case R.id.salvar_cadastro_menu:
                 salvar();
                 break;
         }
