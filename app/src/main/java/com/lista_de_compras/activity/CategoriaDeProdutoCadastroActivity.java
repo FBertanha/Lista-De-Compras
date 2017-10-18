@@ -6,16 +6,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.lista_de_compras.R;
+import com.lista_de_compras.dao.CategoriaDeProdutoDAO;
+import com.lista_de_compras.model.CategoriaDeProduto;
 
 public class CategoriaDeProdutoCadastroActivity extends AppCompatActivity {
+    private EditText editText_nome;
+    private CategoriaDeProduto categoriaDeProduto;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categoria_de_produto_cadastro);
         configurarSupportActionBar();
+        carregarViewComponents();
+
+        categoriaDeProduto = new CategoriaDeProduto();
+
+    }
+
+    private void carregarViewComponents() {
+        editText_nome = (EditText) findViewById(R.id.editText_nome);
     }
 
     @Override
@@ -40,12 +55,29 @@ public class CategoriaDeProdutoCadastroActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.salvar_cadastro_menu:
+                salvar();
+                break;
+
 
         }
         return super.onOptionsItemSelected(item);
 
     }
 
+    private void salvar() {
+        CategoriaDeProdutoDAO categoriaDeProdutoDAO = new CategoriaDeProdutoDAO(this);
+        pegarCategoriaDeProdutoDoFormulario();
+        categoriaDeProdutoDAO.adicionar(categoriaDeProduto);
+
+        Toast.makeText(this, "Categoria salva com sucesso!", Toast.LENGTH_SHORT).show();
+        finish();
+
+    }
+
+    private void pegarCategoriaDeProdutoDoFormulario() {
+        categoriaDeProduto.setNome(editText_nome.getText().toString());
+    }
 
 
 }

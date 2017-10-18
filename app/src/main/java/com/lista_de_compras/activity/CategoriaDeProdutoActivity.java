@@ -11,7 +11,11 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.lista_de_compras.R;
+import com.lista_de_compras.adapter.CategoriaDeProdutoAdapter;
+import com.lista_de_compras.dao.CategoriaDeProdutoDAO;
 import com.lista_de_compras.model.CategoriaDeProduto;
+
+import java.util.List;
 
 public class CategoriaDeProdutoActivity extends AppCompatActivity {
     ListView listViewCategorias;
@@ -22,6 +26,7 @@ public class CategoriaDeProdutoActivity extends AppCompatActivity {
         carregarViewComponents();
         configurarSupportActionBar();
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +36,22 @@ public class CategoriaDeProdutoActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        carregarCategoriasNoListView();
+    }
+
+    public void carregarCategoriasNoListView(){
+        CategoriaDeProdutoDAO categoriaDeProdutoDAO = new CategoriaDeProdutoDAO(this);
+        List<CategoriaDeProduto> todasCategorias = categoriaDeProdutoDAO.todos();
+        CategoriaDeProdutoAdapter categoriaDeProdutoAdapter = new CategoriaDeProdutoAdapter(this, todasCategorias);
+
+        listViewCategorias.setAdapter(categoriaDeProdutoAdapter);
+
+    }
+
     //fazer o ciclo de vida onResume - quando cria uma activity e volta pra ela
     //Obrigatório para onCreateContextMenu
         //monta menu de contexto

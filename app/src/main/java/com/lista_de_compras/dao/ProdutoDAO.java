@@ -16,28 +16,12 @@ import java.util.List;
  * Created by Felipe on 13/09/2017.
  */
 
-public class ProdutoDAO extends SQLiteOpenHelper {
+public class ProdutoDAO extends DAO {
     private Context context;
 
     public ProdutoDAO(Context context) {
-        super(context, "lista_de_compras", null, 1);
+        super(context);
         this.context = context;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE produtos (" +
-                "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "descricao VARCHAR(255) NOT NULL," +
-                "categoria INT NOT NULL," +
-                "valor DOUBLE);";
-
-        db.execSQL(sql);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
     }
 
     public void adicionar(Produto produto) {
