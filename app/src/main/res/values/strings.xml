@@ -6,7 +6,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_produto">Produtos</string>
-    <string name="title_activity_produto_cadastro">Produto</string>
+    <string name="title_activity_produto_cadastro">Cadastro de Produto</string>
     <string name="menu_activity_produto_editar">Editar</string>
     <string name="menu_activity_produto_excluir">Excluir</string>
     <string name="menu_activity_produto_excluir_mensagem">Deseja realmente excluir o produto selecionado?</string>

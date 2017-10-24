@@ -60,7 +60,7 @@ public class ProdutoAdapter extends BaseAdapter {
         TextView textViewValor = (TextView) view.findViewById(R.id.textView_valor);
 
         textViewDescricao.setText(produto.getDescricao());
-        //textViewCategoria.setText(produto.getCategoria().getNome());
+        textViewCategoria.setText(produto.getCategoria().getNome());
         textViewValor.setText(String.valueOf(produto.getValor()));
 
         return view;

@@ -3,18 +3,24 @@ package com.lista_de_compras.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lista_de_compras.R;
+import com.lista_de_compras.dao.CategoriaDeProdutoDAO;
 import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.CategoriaDeProduto;
 import com.lista_de_compras.model.Produto;
+
+import java.util.List;
 
 public class ProdutoCadastroActivity extends AppCompatActivity {
 
@@ -45,19 +51,13 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
     private void carregarProdutoNoFormulario() {
         editTextDescricao.setText(produto.getDescricao());
         editTextValor.setText(String.valueOf(produto.getValor()));
-        // TODO
-        spinnerCategoria.setSelection(1);
+        spinnerCategoria.setSelection(((ArrayAdapter)spinnerCategoria.getAdapter()).getPosition(produto.getCategoria().getNome()));
     }
 
     private void pegarProdutoDoFormulario() {
         produto.setDescricao(editTextDescricao.getText().toString());
         produto.setValor(Double.parseDouble(editTextValor.getText().toString()));
-        // TODO
-        //produto.setCategoria((CategoriaDeProduto) spinnerCategoria.getSelectedItem());
-        CategoriaDeProduto categoriaDeProduto = new CategoriaDeProduto();
-        categoriaDeProduto.setCodigo(1);
-        categoriaDeProduto.setNome("Batata");
-        produto.setCategoria(categoriaDeProduto);
+        produto.setCategoria((CategoriaDeProduto) spinnerCategoria.getSelectedItem());
     }
 
     private void salvar() {
@@ -79,11 +79,23 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         editTextDescricao = (EditText) findViewById(R.id.editText_descricao);
         editTextValor = (EditText) findViewById(R.id.editText_valor);
         spinnerCategoria = (Spinner) findViewById(R.id.spinner_categoria);
-        //TODO
-        String categorias[] = {"Bebidas", "Frios", "Potato"};
-        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categorias);
-        stringArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategoria.setAdapter(stringArrayAdapter);
+        List<CategoriaDeProduto> categoriasDeProdutos = new CategoriaDeProdutoDAO(this).todos();
+        ArrayAdapter<CategoriaDeProduto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriasDeProdutos);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategoria.setAdapter(adapter);
+
+        spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                CategoriaDeProduto categoriaSelecionada = (CategoriaDeProduto) adapterView.getItemAtPosition(position);
+                produto.setCategoria(categoriaSelecionada);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void configurarSupportActionBar() {

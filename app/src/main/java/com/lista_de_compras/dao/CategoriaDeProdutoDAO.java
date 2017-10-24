@@ -57,7 +57,7 @@ public class CategoriaDeProdutoDAO extends DAO {
         Cursor cursor = db.rawQuery(sql, null);
 
         categorias = getCategoriaDeProdutosDoCursor(cursor);
-
+        cursor.close();
         return categorias;
     }
 
@@ -81,5 +81,22 @@ public class CategoriaDeProdutoDAO extends DAO {
 
         return dados;
 
+    }
+
+    public CategoriaDeProduto pegarPorCodigo(int codigo) {
+        String sql = "SELECT * FROM categoriaDeProduto WHERE codigo = ?";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] selectionArgs = new String[]{String.valueOf(codigo)};
+
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        if (cursor.moveToNext()) {
+            CategoriaDeProduto categoriaDeProduto = new CategoriaDeProduto();
+            categoriaDeProduto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+            categoriaDeProduto.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            return categoriaDeProduto;
+        }
+        cursor.close();
+        return null;
     }
 }

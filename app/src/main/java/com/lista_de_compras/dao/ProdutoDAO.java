@@ -71,12 +71,7 @@ public class ProdutoDAO extends DAO {
 
             produto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
             produto.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
-            //TODO chave estrangeira CategoriaDeProduto
-//            CategoriaDeProduto categoriaDeProduto = new CategoriaDeProduto();
-//            categoriaDeProduto.setCodigo(1);
-//            categoriaDeProduto.setNome("Batata");
-            //CategoriaDeProdutoDAO categoriaDeProdutoDAO = new CategoriaDeProdutoDAO(context).pegarPorCodigo(produto.getCategoria());
-            //produto.setCategoria(categoriaDeProduto);
+            produto.setCategoria(new CategoriaDeProdutoDAO(context).pegarPorCodigo(cursor.getInt(cursor.getColumnIndex("categoria"))));
             produto.setValor(cursor.getDouble(cursor.getColumnIndex("valor")));
 
             //Adiciona produto no ArrayList
