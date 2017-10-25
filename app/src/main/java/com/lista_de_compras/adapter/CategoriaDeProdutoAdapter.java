@@ -48,10 +48,10 @@ public class CategoriaDeProdutoAdapter extends BaseAdapter{
         LayoutInflater inflater = LayoutInflater.from(context);
 
         if(view == null){
-            view = inflater.inflate(R.layout.categoria_de_produto_list_item, parent, false);
+            view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         }
 
-        TextView textViewNome = (TextView) view.findViewById(R.id.textView_descricao);
+        TextView textViewNome = (TextView) view.findViewById(android.R.id.text1);
         textViewNome.setText(categoriaDeProduto.getNome());
 
         return view;
