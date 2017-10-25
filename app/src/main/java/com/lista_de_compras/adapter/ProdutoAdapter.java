@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TwoLineListItem;
 
-import com.lista_de_compras.R;
 import com.lista_de_compras.model.Produto;
 
 import org.w3c.dom.Text;
@@ -46,23 +46,23 @@ public class ProdutoAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         Produto produto = produtos.get(position);
-
-        //Infla o layout
-        LayoutInflater inflater = LayoutInflater.from(context);
+        TwoLineListItem twoLineListItem;
 
         if (view == null) {
-            view = inflater.inflate(R.layout.produto_list_item, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            twoLineListItem = (TwoLineListItem) inflater.inflate(
+                    android.R.layout.simple_list_item_2, null);
+        } else {
+            twoLineListItem = (TwoLineListItem) view;
         }
 
-        //ImageView imageViewFoto = (ImageView) view.findViewById(R.id.imageView_foto);
-        TextView textViewDescricao = (TextView) view.findViewById(R.id.textView_descricao);
-        TextView textViewCategoria = (TextView) view.findViewById(R.id.textView_categoria);
-        TextView textViewValor = (TextView) view.findViewById(R.id.textView_valor);
+        TextView text1 = twoLineListItem.getText1();
+        TextView text2 = twoLineListItem.getText2();
 
-        textViewDescricao.setText(produto.getDescricao());
-        textViewCategoria.setText(produto.getCategoria().getNome());
-        textViewValor.setText(String.valueOf(produto.getValor()));
+        text1.setText(produto.getDescricao());
+        text2.setText(produto.getCategoria().getNome());
 
-        return view;
+        return twoLineListItem;
+
     }
 }
