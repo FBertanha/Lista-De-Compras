@@ -12,6 +12,16 @@ public class Produto implements Serializable{
     private CategoriaDeProduto categoria;
     private double valor;
 
+    public Produto() {
+    }
+
+    public Produto(Integer codigo, String descricao, CategoriaDeProduto categoria, double valor) {
+        this.codigo = codigo;
+        this.descricao = descricao;
+        this.categoria = categoria;
+        this.valor = valor;
+    }
+
     public Integer getCodigo() {
         return codigo;
     }

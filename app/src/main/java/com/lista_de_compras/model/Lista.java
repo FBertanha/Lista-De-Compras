@@ -1,5 +1,6 @@
 package com.lista_de_compras.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by evely on 30/08/2017.
  */
 
-public class Lista {
+public class Lista implements Serializable {
     private int codigo;
     private CategoriaDeLista categoria;
     private List<Produto> produtos;
@@ -15,6 +16,17 @@ public class Lista {
     private Date dataCriacao;
     private Date dataCompra;
 
+    public Lista() {
+    }
+
+    public Lista(int codigo, CategoriaDeLista categoria, List<Produto> produtos, String nome, Date dataCriacao, Date dataCompra) {
+        this.codigo = codigo;
+        this.categoria = categoria;
+        this.produtos = produtos;
+        this.nome = nome;
+        this.dataCriacao = dataCriacao;
+        this.dataCompra = dataCompra;
+    }
 
     public int getCodigo() {
         return codigo;

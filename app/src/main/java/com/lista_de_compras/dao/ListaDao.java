@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lista_de_compras.model.CategoriaDeLista;
-import com.lista_de_compras.model.CategoriaDeProduto;
 import com.lista_de_compras.model.Lista;
 import com.lista_de_compras.model.Produto;
 
@@ -19,41 +17,15 @@ import java.util.List;
  * Created by EduardoV on 20/09/2017.
  */
 
-public class ListaDao extends SQLiteOpenHelper {
+public class ListaDao extends DAO {
 
-    public ListaDao(Context context) { super(context, "lista_de_compras", null, 1 ) ; }
+    private final Context context;
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE listas (" +
-                "codigo INT PRIMARY KEY AUTOINCREMENT," +
-                "categoria int NOT NULL," +
-                "produtos   NOT NULL," +
-                "nome VARCHAR(255) NOT NULL," +
-                "dataCriacao DATE ," +
-                "dataCompra DATE ;";
-
-               String sqp = "CREATE TABLE lista_produtos (" +
-                       " codigo_listas int ," +
-                       " codigo_produto int  ";
-
-
-
-
-        db.execSQL(sql);
-        db.execSQL(sqp);
-
-
-
+    public ListaDao(Context context) {
+        super(context);
+        this.context = context;
     }
 
-
-
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-    }
 
     public void adicionar(Lista lista) {
         SQLiteDatabase db = getWritableDatabase();
@@ -83,13 +55,36 @@ public class ListaDao extends SQLiteOpenHelper {
     public List<Lista> todos() {
         List<Lista> listas;
 
-        String sql = "SELECT * FROM listas";
+        //TODO array temporário pra teste
 
-        SQLiteDatabase db = getWritableDatabase();
+        listas = new ArrayList<>();
+        Lista lista = new Lista();
+        lista.setCategoria(new CategoriaDeLista());
+        lista.setCodigo(1);
+        lista.setNome("Churrasco");
 
-        Cursor cursor = db.rawQuery(sql, null);
+        List<Produto> produtos = new ArrayList<>();
+        produtos.add(new Produto(1, "Batata", null, 10));
+        produtos.add(new Produto(1, "Batata", null, 10));
+        produtos.add(new Produto(1, "Batata", null, 10));
+        produtos.add(new Produto(1, "Batata", null, 10));
+        produtos.add(new Produto(1, "Batata", null, 10));
 
-        listas = getListasDoCursor(cursor);
+        lista.setProdutos(produtos);
+
+        listas.add(lista);
+        listas.add(lista);
+        listas.add(lista);
+        listas.add(lista);
+
+
+//        String sql = "SELECT * FROM listas";
+//
+//        SQLiteDatabase db = getWritableDatabase();
+//
+//        Cursor cursor = db.rawQuery(sql, null);
+//
+//        listas = getListasDoCursor(cursor);
 
 
         return listas;
@@ -103,9 +98,12 @@ public class ListaDao extends SQLiteOpenHelper {
 
             lista.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
             //TODA chave estrangeira CategoriaDeLista
+            // TODO Categoria De lista
             lista.setCategoria(new CategoriaDeLista());
+            // TODO
             lista.setProdutos((List<Produto>) new Produto());
             lista.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            // TODO
             lista.setDataCriacao(new Date());
             lista.setDataCompra(new Date());
 
@@ -120,6 +118,7 @@ public class ListaDao extends SQLiteOpenHelper {
 
         dados.put("codigo", lista.getCodigo());
         dados.put("categoria", String.valueOf(lista.getCategoria()));
+        //TODO
         dados.put("produtos", String.valueOf(lista.getProdutos()));
         dados.put("nome", lista.getNome());
         dados.put("dataCriacao", String.valueOf(lista.getDataCriacao()));

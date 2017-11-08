@@ -1,24 +1,35 @@
 package com.lista_de_compras.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.lista_de_compras.R;
-import com.lista_de_compras.model.CategoriaDeProduto;
+import com.lista_de_compras.adapter.ListaAdapter;
+import com.lista_de_compras.dao.ListaDao;
+import com.lista_de_compras.dao.ProdutoDAO;
+import com.lista_de_compras.model.Lista;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ListView listViewLista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +37,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        carregarViewComponents();
+        configurarListView();
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ListaCadastroActivity.class);
+                //intent.putExtra("lista", lista);
+                startActivity(intent);
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -104,5 +118,76 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        carregarProdutosNoListView();
+    }
+
+    //Obrigatório para onCreateContextMenu
+    private void configurarListView() {
+        registerForContextMenu(listViewLista);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        //super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+        //Pega lista selecionado
+        final Lista lista = (Lista) listViewLista.getItemAtPosition(info.position);
+
+        MenuItem menuEditar = menu.add(R.string.menu_activity_produto_editar);
+        menuEditar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(MainActivity.this, ListaDetalhesActivity.class);
+                intent.putExtra("lista", lista);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        //Monta menu de contexto
+        MenuItem menuExcluir = menu.add(R.string.menu_activity_produto_excluir);
+        menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                //Monta uma dialogo de confirmação, sim/não
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(R.string.menu_activity_produto_excluir)
+                        .setMessage(R.string.menu_activity_produto_excluir_mensagem)
+                        //.setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new ProdutoDAO(MainActivity.this).excluir(lista.getCodigo());
+                                carregarProdutosNoListView();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
+                return true;
+            }
+        });
+
+    }
+
+    private void carregarProdutosNoListView() {
+        ListaDao listaDao = new ListaDao(this);
+        List<Lista> todasListas = listaDao.todos();
+
+        ListaAdapter listaAdapter = new ListaAdapter(this, todasListas);
+        //ArrayAdapter<Produto> listaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todasListas);
+
+
+        listViewLista.setAdapter(listaAdapter);
+    }
+
+    private void carregarViewComponents() {
+        listViewLista = (ListView) findViewById(R.id.listView_listas);
     }
 }
