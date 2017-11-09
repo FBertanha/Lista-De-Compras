@@ -1,9 +1,8 @@
 package com.lista_de_compras.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,7 +77,7 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
     private void carregarViewComponents() {
         editTextDescricao = (EditText) findViewById(R.id.editText_descricao);
         editTextValor = (EditText) findViewById(R.id.editText_valor);
-        spinnerCategoria = (Spinner) findViewById(R.id.spinner_categoria);
+        spinnerCategoria = (Spinner) findViewById(R.id.spinner_lista_categoria);
         List<CategoriaDeProduto> categoriasDeProdutos = new CategoriaDeProdutoDAO(this).todos();
         ArrayAdapter<CategoriaDeProduto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriasDeProdutos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

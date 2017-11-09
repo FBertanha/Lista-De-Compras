@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
 import com.lista_de_compras.model.Produto;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -60,7 +57,7 @@ public class ProdutoAdapter extends BaseAdapter {
         TextView text2 = twoLineListItem.getText2();
 
         text1.setText(produto.getDescricao());
-        text2.setText(produto.getCategoria().getNome());
+        text2.setText(String.valueOf(produto.getValor()));
 
         return twoLineListItem;
 

@@ -17,11 +17,11 @@ import java.util.List;
  * Created by EduardoV on 20/09/2017.
  */
 
-public class ListaDao extends DAO {
+public class ListaDAO extends DAO {
 
     private final Context context;
 
-    public ListaDao(Context context) {
+    public ListaDAO(Context context) {
         super(context);
         this.context = context;
     }

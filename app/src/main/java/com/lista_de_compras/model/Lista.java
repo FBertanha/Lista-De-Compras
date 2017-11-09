@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class Lista implements Serializable {
-    private int codigo;
+    private Integer codigo;
     private CategoriaDeLista categoria;
     private List<Produto> produtos;
     private String nome;
@@ -28,11 +28,11 @@ public class Lista implements Serializable {
         this.dataCompra = dataCompra;
     }
 
-    public int getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 

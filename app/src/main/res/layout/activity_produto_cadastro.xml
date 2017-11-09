@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lista_de_compras.activity.ProdutoCadastroActivity"
-    tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -28,15 +27,15 @@
     </android.support.design.widget.TextInputLayout>
 
     <Spinner
-        android:id="@+id/spinner_categoria"
+        android:id="@+id/spinner_lista_categoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/textInputLayout"
-        android:layout_alignLeft="@+id/textInputLayout"
-        android:layout_alignStart="@+id/textInputLayout"
-        android:layout_alignRight="@+id/textInputLayout"
         android:layout_alignEnd="@+id/textInputLayout"
+        android:layout_alignLeft="@+id/textInputLayout"
+        android:layout_alignRight="@+id/textInputLayout"
+        android:layout_alignStart="@+id/textInputLayout"
+        android:layout_below="@+id/textInputLayout"
+        android:layout_marginTop="15dp"
         />
 
 
@@ -46,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/spinner_categoria"
+        android:layout_below="@+id/spinner_lista_categoria"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp">
@@ -57,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/spinner_categoria"
+            android:layout_below="@+id/spinner_lista_categoria"
             android:ems="10"
             android:hint="Valor"
             android:inputType="numberDecimal" />

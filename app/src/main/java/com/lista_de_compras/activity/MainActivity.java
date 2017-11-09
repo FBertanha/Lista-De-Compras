@@ -20,7 +20,7 @@ import android.widget.ListView;
 
 import com.lista_de_compras.R;
 import com.lista_de_compras.adapter.ListaAdapter;
-import com.lista_de_compras.dao.ListaDao;
+import com.lista_de_compras.dao.ListaDAO;
 import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.Lista;
 
@@ -177,8 +177,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void carregarProdutosNoListView() {
-        ListaDao listaDao = new ListaDao(this);
-        List<Lista> todasListas = listaDao.todos();
+        ListaDAO listaDAO = new ListaDAO(this);
+        List<Lista> todasListas = listaDAO.todos();
 
         ListaAdapter listaAdapter = new ListaAdapter(this, todasListas);
         //ArrayAdapter<Produto> listaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todasListas);

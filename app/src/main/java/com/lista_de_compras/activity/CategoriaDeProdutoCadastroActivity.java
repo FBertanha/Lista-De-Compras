@@ -1,8 +1,7 @@
 package com.lista_de_compras.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +29,7 @@ public class CategoriaDeProdutoCadastroActivity extends AppCompatActivity {
     }
 
     private void carregarViewComponents() {
-        editText_nome = (EditText) findViewById(R.id.editText_nome);
+        editText_nome = (EditText) findViewById(R.id.editText_lista_nome);
     }
 
     @Override
