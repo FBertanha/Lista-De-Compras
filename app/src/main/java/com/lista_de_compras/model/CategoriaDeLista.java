@@ -10,6 +10,14 @@ public class CategoriaDeLista implements Serializable {
     private int codigo;
     private String nome;
 
+    public CategoriaDeLista() {
+    }
+
+    public CategoriaDeLista(int codigo, String nome) {
+        this.codigo = codigo;
+        this.nome = nome;
+    }
+
     public int getCodigo() {
         return codigo;
     }
@@ -24,5 +32,13 @@ public class CategoriaDeLista implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoriaDeLista{" +
+                "codigo=" + codigo +
+                ", nome='" + nome + '\'' +
+                '}';
     }
 }

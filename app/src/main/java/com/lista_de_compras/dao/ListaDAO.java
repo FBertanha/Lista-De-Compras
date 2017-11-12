@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.lista_de_compras.model.CategoriaDeLista;
 import com.lista_de_compras.model.Lista;
-import com.lista_de_compras.model.Produto;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +31,11 @@ public class ListaDAO extends DAO {
 
         ContentValues dadosLista = getDadosLista(lista);
 
-        db.insert("listas", null, dadosLista);
+        long codigoLista = db.insert("listas", null, dadosLista);
+
+        lista.setCodigo(Integer.parseInt(String.valueOf(codigoLista)));
+        new ListaProdutoDAO(context, lista).adicionar();
+
     }
 
     public void editar(Lista lista) {
@@ -55,27 +58,40 @@ public class ListaDAO extends DAO {
     public List<Lista> todos() {
         List<Lista> listas;
 
-        //TODO array temporário pra teste
+        String sql = "SELECT * FROM listas";
 
-        listas = new ArrayList<>();
-        Lista lista = new Lista();
-        lista.setCategoria(new CategoriaDeLista());
-        lista.setCodigo(1);
-        lista.setNome("Churrasco");
+        SQLiteDatabase db = getWritableDatabase();
 
-        List<Produto> produtos = new ArrayList<>();
-        produtos.add(new Produto(1, "Batata", null, 10));
-        produtos.add(new Produto(1, "Batata", null, 10));
-        produtos.add(new Produto(1, "Batata", null, 10));
-        produtos.add(new Produto(1, "Batata", null, 10));
-        produtos.add(new Produto(1, "Batata", null, 10));
+        Cursor cursor = db.rawQuery(sql, null);
 
-        lista.setProdutos(produtos);
+        listas = getListasDoCursor(cursor);
 
-        listas.add(lista);
-        listas.add(lista);
-        listas.add(lista);
-        listas.add(lista);
+        return listas;
+
+
+//        List<Lista> listas;
+//
+//        //TODO array temporário pra teste
+//
+//        listas = new ArrayList<>();
+//        Lista lista = new Lista();
+//        lista.setCategoria(new CategoriaDeLista());
+//        lista.setCodigo(1);
+//        lista.setNome("Churrasco");
+//
+//        List<Produto> produtos = new ArrayList<>();
+//        produtos.add(new Produto(1, "Batata", null, 10));
+//        produtos.add(new Produto(1, "Batata", null, 10));
+//        produtos.add(new Produto(1, "Batata", null, 10));
+//        produtos.add(new Produto(1, "Batata", null, 10));
+//        produtos.add(new Produto(1, "Batata", null, 10));
+//
+//        lista.setProdutos(produtos);
+//
+//        listas.add(lista);
+//        listas.add(lista);
+//        listas.add(lista);
+//        listas.add(lista);
 
 
 //        String sql = "SELECT * FROM listas";
@@ -87,7 +103,7 @@ public class ListaDAO extends DAO {
 //        listas = getListasDoCursor(cursor);
 
 
-        return listas;
+        //return listas;
     }
 
     private List<Lista> getListasDoCursor(Cursor cursor) {
@@ -99,14 +115,14 @@ public class ListaDAO extends DAO {
             lista.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
             //TODA chave estrangeira CategoriaDeLista
             // TODO Categoria De lista
-            lista.setCategoria(new CategoriaDeLista());
+            //lista.setCategoria(new CategoriaDeListaDAO(context).pegarPorCodigo(cursor.getInt(cursor.getColumnIndex("categoria"))));
+            lista.setCategoria(new CategoriaDeLista(1, "Festa"));
             // TODO
-            lista.setProdutos((List<Produto>) new Produto());
+            lista.setProdutos(new ListaProdutoDAO(context, lista).pegarProdutos());
             lista.setNome(cursor.getString(cursor.getColumnIndex("nome")));
             // TODO
             lista.setDataCriacao(new Date());
             lista.setDataCompra(new Date());
-
             //Adiciona produto no ArrayList
             listas.add(lista);
         }
@@ -117,12 +133,15 @@ public class ListaDAO extends DAO {
         ContentValues dados = new ContentValues();
 
         dados.put("codigo", lista.getCodigo());
-        dados.put("categoria", String.valueOf(lista.getCategoria()));
         //TODO
-        dados.put("produtos", String.valueOf(lista.getProdutos()));
+        //dados.put("categoria", String.valueOf(lista.getCategoria().getCodigo()));
+        dados.put("categoria", 1);
+        //TODO
+        //dados.put("produtos", String.valueOf(lista.getProdutos()));
         dados.put("nome", lista.getNome());
-        dados.put("dataCriacao", String.valueOf(lista.getDataCriacao()));
-        dados.put("dataCompra", String.valueOf(lista.getDataCompra()));
+        //TODO
+        //dados.put("dataCriacao", String.valueOf(lista.getDataCriacao()));
+        //dados.put("dataCompra", String.valueOf(lista.getDataCompra()));
 
 
         return dados;

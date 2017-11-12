@@ -56,14 +56,20 @@ public class CategoriaDeListaDAO extends SQLiteOpenHelper {
     }
 
     public List<CategoriaDeLista> todos(){
-        List<CategoriaDeLista> categoriadelistas;
-        String sql = "SELECT * FROM CategoriaDeLista";
-        SQLiteDatabase db = getWritableDatabase();
+        List<CategoriaDeLista> categoriaDeListas;
 
-        Cursor cursor = db.rawQuery(sql,null);
-
-        categoriadelistas = getCategoriaDoCursor(cursor);
-        return categoriadelistas;
+        //TODO
+        categoriaDeListas = new ArrayList<>();
+        categoriaDeListas.add(new CategoriaDeLista(1, "Festa"));
+        categoriaDeListas.add(new CategoriaDeLista(1, "Teste"));
+        categoriaDeListas.add(new CategoriaDeLista(1, "Teste2"));
+//        String sql = "SELECT * FROM CategoriaDeLista";
+//        SQLiteDatabase db = getWritableDatabase();
+//
+//        Cursor cursor = db.rawQuery(sql,null);
+//
+//        categoriaDeListas = getCategoriaDoCursor(cursor);
+        return categoriaDeListas;
     }
 
 
@@ -87,5 +93,23 @@ public class CategoriaDeListaDAO extends SQLiteOpenHelper {
         dados.put("nome",categoria.getNome());
 
         return dados;
+    }
+
+
+    public CategoriaDeLista pegarPorCodigo(int codigo) {
+        String sql = "SELECT * FROM categoriaDeLista WHERE codigo = ?";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] selectionArgs = new String[]{String.valueOf(codigo)};
+
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        if (cursor.moveToNext()) {
+            CategoriaDeLista categoriaDeProduto = new CategoriaDeLista();
+            categoriaDeProduto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+            categoriaDeProduto.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            return categoriaDeProduto;
+        }
+        cursor.close();
+        return null;
     }
 }

@@ -39,7 +39,7 @@ public class DAO extends SQLiteOpenHelper {
         sql = "CREATE TABLE listas (" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "categoria INT NOT NULL," +
-                "produtos INT  NOT NULL," +
+                //"produtos INT  NOT NULL," +
                 "nome VARCHAR(255) NOT NULL," +
                 "dataCriacao DATE ," +
                 "dataCompra DATE );";
@@ -56,7 +56,7 @@ public class DAO extends SQLiteOpenHelper {
         sql = "CREATE TABLE listaProdutos (" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "produto INT NOT NULL," +
-                "categoria INT NOT NULL," +
+                "lista INT NOT NULL," +
                 "selecionado INT DEFAULT 0);";
         db.execSQL(sql);
 

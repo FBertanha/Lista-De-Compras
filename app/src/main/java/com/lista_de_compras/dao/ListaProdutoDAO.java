@@ -5,59 +5,41 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.lista_de_compras.model.Lista;
 import com.lista_de_compras.model.Produto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Felipe on 13/09/2017.
+ * Created by berta on 11/9/2017.
  */
 
-public class ProdutoDAO extends DAO {
-    private Context context;
+public class ListaProdutoDAO extends DAO {
 
-    public ProdutoDAO(Context context) {
+    private Context context;
+    private Lista lista;
+
+    public ListaProdutoDAO(Context context, Lista lista) {
         super(context);
         this.context = context;
+        this.lista = lista;
     }
 
-    public void adicionar(Produto produto) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues dadosProduto = getDadosProduto(produto);
-
-        db.insert("produtos", null, dadosProduto);
-    }
-
-    public void editar(Produto produto) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues dadosProduto = getDadosProduto(produto);
-        String[] whereArgs = new String[]{String.valueOf(produto.getCodigo())};
-
-        db.update("produtos", dadosProduto, "codigo = ?", whereArgs);
-    }
-
-    public void excluir(int codigo) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        String[] whereArgs = new String[]{String.valueOf(codigo)};
-
-        db.delete("produtos", "codigo = ?", whereArgs);
-    }
-
-    public List<Produto> todos() {
+    public List<Produto> pegarProdutos() {
         List<Produto> produtos;
 
-        String sql = "SELECT * FROM produtos";
-
+        String sql = "SELECT * FROM listaProdutos lp" +
+                " LEFT JOIN  produtos p" +
+                " ON lp.produto = p.codigo" +
+                " WHERE lista = ? ";
         SQLiteDatabase db = getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(sql, null);
+        String[] selectionArgs = new String[]{String.valueOf(lista.getCodigo())};
+
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
 
         produtos = getProdutosDoCursor(cursor);
-
         return produtos;
     }
 
@@ -78,15 +60,28 @@ public class ProdutoDAO extends DAO {
         return produtos;
     }
 
-
     private ContentValues getDadosProduto(Produto produto) {
         ContentValues dados = new ContentValues();
-        dados.put("codigo", produto.getCodigo());
-        dados.put("descricao", produto.getDescricao());
-        dados.put("categoria", produto.getCategoria().getCodigo());
-        dados.put("valor", produto.getValor());
+        dados.put("produto", produto.getCodigo());
+        dados.put("lista", lista.getCodigo());
+        dados.put("selecionado", false);
         return dados;
     }
 
 
+    public void adicionar() {
+
+        for (Produto produto :
+                lista.getProdutos()) {
+            adicionar(produto);
+        }
+    }
+
+    public void adicionar(Produto produto) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues dadosProduto = getDadosProduto(produto);
+
+        db.insert("listaProdutos", null, dadosProduto);
+    }
 }
