@@ -22,12 +22,12 @@ public class ProdutoDAO extends DAO {
         this.context = context;
     }
 
-    public void adicionar(Produto produto) {
+    public long adicionar(Produto produto) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues dadosProduto = getDadosProduto(produto);
 
-        db.insert("produtos", null, dadosProduto);
+        return db.insert("produtos", null, dadosProduto);
     }
 
     public void editar(Produto produto) {
@@ -50,7 +50,7 @@ public class ProdutoDAO extends DAO {
     public List<Produto> todos() {
         List<Produto> produtos;
 
-        String sql = "SELECT * FROM produtos";
+        String sql = "SELECT * FROM produtos order by descricao";
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -83,10 +83,26 @@ public class ProdutoDAO extends DAO {
         ContentValues dados = new ContentValues();
         dados.put("codigo", produto.getCodigo());
         dados.put("descricao", produto.getDescricao());
-        dados.put("categoria", produto.getCategoria().getCodigo());
+        if (produto.getCategoria() != null)
+            dados.put("categoria", produto.getCategoria().getCodigo());
+        else
+            dados.put("categoria", 1);
         dados.put("valor", produto.getValor());
         return dados;
     }
 
 
+//    public Produto pegarPorDescricao(String descricao) {
+//        //TODO
+//        String[] whereArgs = new String[]{descricao};
+//        String sql = "SELECT count(*) FROM produtos where descricao = ?";
+//
+//        SQLiteDatabase db = getWritableDatabase();
+//
+//        Cursor cursor = db.rawQuery(sql, null);
+//
+//        produtos = getProdutosDoCursor(cursor);
+//
+//        return produtos;
+//    }
 }

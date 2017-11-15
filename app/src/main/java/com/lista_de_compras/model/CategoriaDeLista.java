@@ -36,9 +36,6 @@ public class CategoriaDeLista implements Serializable {
 
     @Override
     public String toString() {
-        return "CategoriaDeLista{" +
-                "codigo=" + codigo +
-                ", nome='" + nome + '\'' +
-                '}';
+        return nome;
     }
 }

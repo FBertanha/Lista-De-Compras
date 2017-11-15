@@ -8,4 +8,9 @@
     tools:context="com.lista_de_compras.activity.ListaDetalhesActivity"
     tools:showIn="@layout/activity_lista_detalhes">
 
+    <ListView
+        android:id="@+id/listView_lista_produtos_detalhes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </android.support.constraint.ConstraintLayout>

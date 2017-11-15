@@ -26,9 +26,8 @@ import com.lista_de_compras.model.Lista;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private String TAG = getClass().getSimpleName();
     private ListView listViewLista;
 
     @Override
@@ -189,5 +188,15 @@ public class MainActivity extends AppCompatActivity
 
     private void carregarViewComponents() {
         listViewLista = (ListView) findViewById(R.id.listView_listas);
+
+        listViewLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Lista lista = (Lista) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(MainActivity.this, ListaDetalhesActivity.class);
+                intent.putExtra("lista", lista);
+                startActivity(intent);
+            }
+        });
     }
 }

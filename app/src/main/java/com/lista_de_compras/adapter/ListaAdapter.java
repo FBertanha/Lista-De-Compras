@@ -6,9 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.TwoLineListItem;
 
+import com.lista_de_compras.R;
 import com.lista_de_compras.model.Lista;
+import com.lista_de_compras.model.Produto;
 
 import java.util.List;
 
@@ -43,23 +44,24 @@ public class ListaAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         Lista lista = listas.get(position);
-        TwoLineListItem twoLineListItem;
+        View listaListView;
 
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            twoLineListItem = (TwoLineListItem) inflater.inflate(
-                    android.R.layout.simple_list_item_2, null);
+            listaListView = inflater.inflate(R.layout.lista_list_item, parent, false);
         } else {
-            twoLineListItem = (TwoLineListItem) view;
+            listaListView = view;
         }
 
-        TextView text1 = twoLineListItem.getText1();
-        TextView text2 = twoLineListItem.getText2();
+        TextView nome = listaListView.findViewById(R.id.textView_lista_nome);
+        TextView categoria = listaListView.findViewById(R.id.textView_lista_categoria);
+        TextView preco = listaListView.findViewById(R.id.textView_lista_total);
 
-        text1.setText(lista.getNome());
-        text2.setText(lista.getNome());
+        nome.setText(lista.getNome());
+        categoria.setText(lista.getCategoria().getNome());
+        preco.setText(String.valueOf(lista.getProdutos().stream().mapToDouble(Produto::getValor).sum()));
         // TODO total dos itens
 
-        return twoLineListItem;
+        return listaListView;
     }
 }

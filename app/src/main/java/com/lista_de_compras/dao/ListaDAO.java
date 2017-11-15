@@ -68,42 +68,6 @@ public class ListaDAO extends DAO {
 
         return listas;
 
-
-//        List<Lista> listas;
-//
-//        //TODO array temporário pra teste
-//
-//        listas = new ArrayList<>();
-//        Lista lista = new Lista();
-//        lista.setCategoria(new CategoriaDeLista());
-//        lista.setCodigo(1);
-//        lista.setNome("Churrasco");
-//
-//        List<Produto> produtos = new ArrayList<>();
-//        produtos.add(new Produto(1, "Batata", null, 10));
-//        produtos.add(new Produto(1, "Batata", null, 10));
-//        produtos.add(new Produto(1, "Batata", null, 10));
-//        produtos.add(new Produto(1, "Batata", null, 10));
-//        produtos.add(new Produto(1, "Batata", null, 10));
-//
-//        lista.setProdutos(produtos);
-//
-//        listas.add(lista);
-//        listas.add(lista);
-//        listas.add(lista);
-//        listas.add(lista);
-
-
-//        String sql = "SELECT * FROM listas";
-//
-//        SQLiteDatabase db = getWritableDatabase();
-//
-//        Cursor cursor = db.rawQuery(sql, null);
-//
-//        listas = getListasDoCursor(cursor);
-
-
-        //return listas;
     }
 
     private List<Lista> getListasDoCursor(Cursor cursor) {

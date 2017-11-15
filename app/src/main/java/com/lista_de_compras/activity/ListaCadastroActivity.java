@@ -3,6 +3,7 @@ package com.lista_de_compras.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.lista_de_compras.R;
 import com.lista_de_compras.adapter.ProdutoAdapter;
 import com.lista_de_compras.dao.CategoriaDeListaDAO;
+import com.lista_de_compras.dao.CategoriaDeProdutoDAO;
 import com.lista_de_compras.dao.ListaDAO;
 import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.CategoriaDeLista;
@@ -33,6 +36,7 @@ public class ListaCadastroActivity extends AppCompatActivity {
 
     private static final String TAG = "ListaCadastroActivity";
 
+    private CheckBox checkBoxListaProdutoSelecionado;
     private EditText editTextListaNome;
     private Spinner spinnerListaCategoria;
     private AutoCompleteTextView autoCompleteTextViewListaProduto;
@@ -56,15 +60,25 @@ public class ListaCadastroActivity extends AppCompatActivity {
         Intent intent = getIntent();
         lista = (Lista) intent.getSerializableExtra("lista");
 
+
         if (lista != null) {
             carregarListaNoFormulario();
         } else {
             lista = new Lista();
         }
 
-        //TODO
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        carregarTodosProdutos();
 
+    }
+
+    private void carregarTodosProdutos() {
+        //Traz todos produtos
+        //listaDeProdutos = new ListaProdutoDAO(ListaCadastroActivity.this, lista).pegarProdutos();
     }
 
     private void carregarListaNoFormulario() {
@@ -105,7 +119,7 @@ public class ListaCadastroActivity extends AppCompatActivity {
             listaDAO.adicionar(lista);
         }
 
-        Toast.makeText(this, "Lista salvo com sucesso!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Lista salva com sucesso!", Toast.LENGTH_SHORT).show();
 
         finish();
 
@@ -127,6 +141,7 @@ public class ListaCadastroActivity extends AppCompatActivity {
 
     private void carregarProdutosNoListView() {
 
+
         ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, listaDeProdutos);
         //ArrayAdapter<Produto> produtoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todosProdutos);
 
@@ -146,27 +161,43 @@ public class ListaCadastroActivity extends AppCompatActivity {
         }
     }
 
-    private void carregarListasNoListView() {
-        ProdutoDAO produtoDAO = new ProdutoDAO(this);
-        List<Produto> todosProdutos = produtoDAO.todos();
-
-        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
-        //ArrayAdapter<Produto> produtoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todosProdutos);
-
-
-        listViewListaProdutos.setAdapter(produtoAdapter);
-    }
+//    private void carregarListasNoListView() {
+//        ProdutoDAO produtoDAO = new ProdutoDAO(this);
+//        List<Produto> todosProdutos = produtoDAO.todos();
+//
+//        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
+//        //ArrayAdapter<Produto> produtoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todosProdutos);
+//
+//
+//        listViewListaProdutos.setAdapter(produtoAdapter);
+//    }
 
     private void carregarViewComponents() {
+        checkBoxListaProdutoSelecionado = (CheckBox) findViewById(R.id.checkbox_lista_produto_selecionado);
         editTextListaNome = (EditText) findViewById(R.id.editText_lista_nome);
         spinnerListaCategoria = (Spinner) findViewById(R.id.spinner_lista_categoria);
-        ;
         autoCompleteTextViewListaProduto = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_lista_produto);
         listViewListaProdutos = (ListView) findViewById(R.id.listView_lista_produtos);
 
         configurarSpinner();
         configurarAutoCompleteTextView();
     }
+
+//    private void configurarCheckbox() {
+//        listViewListaProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                CheckBox chk = (CheckBox) view.findViewById(R.id.checkbox_lista_produto_selecionado);
+//                chk.setChecked(!chk.isChecked());
+//
+//                Produto produto = (Produto) chk.getTag();
+//                produto.setSelecionado(chk.isChecked());
+//
+//                ListaProdutoDAO listaProdutoDAO = new ListaProdutoDAO(ListaCadastroActivity.this, lista);
+//                listaProdutoDAO.editar(produto);
+//            }
+//        });
+//    }
 
     private void configurarSpinner() {
         List<CategoriaDeLista> categoriasDeLista = new CategoriaDeListaDAO(this).todos();
@@ -210,6 +241,22 @@ public class ListaCadastroActivity extends AppCompatActivity {
                     return false;
                 }
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    boolean flagGravar = true;
+                    ProdutoDAO produtoDAO = new ProdutoDAO(ListaCadastroActivity.this);
+                    Editable descricao = autoCompleteTextViewListaProduto.getText();
+
+                    for (Produto p :
+                            listaDeProdutos) {
+                        if (p.getDescricao().equals(descricao)) {
+                            flagGravar = false;
+                            break;
+                        }
+                    }
+                    if (flagGravar) {
+                        produto = new Produto(null, descricao.toString(), new CategoriaDeProdutoDAO(ListaCadastroActivity.this).pegarPorCodigo(1), 0, false);
+                        produto.setCodigo(Integer.parseInt(String.valueOf(produtoDAO.adicionar(produto))));
+
+                    }
                     adicionarProdutoNaLista();
                     return true;
                 }

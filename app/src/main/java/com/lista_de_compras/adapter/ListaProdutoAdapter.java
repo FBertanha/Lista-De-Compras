@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.lista_de_compras.R;
@@ -16,11 +17,11 @@ import java.util.List;
  * Created by Felipe on 25/09/2017.
  */
 
-public class ProdutoAdapter extends BaseAdapter {
+public class ListaProdutoAdapter extends BaseAdapter {
     private Context context;
     private List<Produto> produtos;
 
-    public ProdutoAdapter(Context context, List<Produto> produtos) {
+    public ListaProdutoAdapter(Context context, List<Produto> produtos) {
         this.context = context;
         this.produtos = produtos;
     }
@@ -47,20 +48,21 @@ public class ProdutoAdapter extends BaseAdapter {
 
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            produtoListView = inflater.inflate(R.layout.produto_list_item, parent, false);
+            produtoListView = inflater.inflate(R.layout.lista_produto_list_item, parent, false);
         } else {
             produtoListView = view;
         }
 
-        TextView nome = produtoListView.findViewById(R.id.textView_lista_produto_descricao);
-        TextView categoria = produtoListView.findViewById(R.id.textView_produto_categoria);
+        CheckBox selecionado = produtoListView.findViewById(R.id.checkbox_lista_produto_selecionado);
+        //TextView nome = produtoListView.findViewById(R.id.textView_lista_produto_descricao);
         TextView preco = produtoListView.findViewById(R.id.textView_lista_produto_valor);
 
-        nome.setText(produto.getDescricao());
-        categoria.setText(produto.getCategoria().getNome());
+        selecionado.setChecked(produto.isSelecionado());
+        selecionado.setText(produto.getDescricao());
+        selecionado.setTag(produto);
+        //nome.setText(produto.getDescricao());
         preco.setText(String.valueOf(produto.getValor()));
 
         return produtoListView;
-
     }
 }

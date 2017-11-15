@@ -2,17 +2,13 @@ package com.lista_de_compras.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObservable;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lista_de_compras.model.CategoriaDeProduto;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.R.id.list;
 
 /**
  * Created by evely on 27/09/2017.
@@ -51,7 +47,7 @@ public class CategoriaDeProdutoDAO extends DAO {
 
     public List<CategoriaDeProduto> todos(){
         List<CategoriaDeProduto> categorias;
-        String sql = "SELECT * FROM categoriaDeProduto";
+        String sql = "SELECT * FROM categoriaDeProduto order by nome";
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor cursor = db.rawQuery(sql, null);

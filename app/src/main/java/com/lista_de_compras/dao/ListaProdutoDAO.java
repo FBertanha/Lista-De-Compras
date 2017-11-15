@@ -30,7 +30,7 @@ public class ListaProdutoDAO extends DAO {
         List<Produto> produtos;
 
         String sql = "SELECT * FROM listaProdutos lp" +
-                " LEFT JOIN  produtos p" +
+                " INNER JOIN  produtos p" +
                 " ON lp.produto = p.codigo" +
                 " WHERE lista = ? ";
         SQLiteDatabase db = getWritableDatabase();
@@ -54,6 +54,7 @@ public class ListaProdutoDAO extends DAO {
             produto.setCategoria(new CategoriaDeProdutoDAO(context).pegarPorCodigo(cursor.getInt(cursor.getColumnIndex("categoria"))));
             produto.setValor(cursor.getDouble(cursor.getColumnIndex("valor")));
 
+            produto.setSelecionado(cursor.getInt(cursor.getColumnIndex("selecionado")) > 0);
             //Adiciona produto no ArrayList
             produtos.add(produto);
         }
@@ -64,13 +65,11 @@ public class ListaProdutoDAO extends DAO {
         ContentValues dados = new ContentValues();
         dados.put("produto", produto.getCodigo());
         dados.put("lista", lista.getCodigo());
-        dados.put("selecionado", false);
+        dados.put("selecionado", produto.isSelecionado());
         return dados;
     }
 
-
     public void adicionar() {
-
         for (Produto produto :
                 lista.getProdutos()) {
             adicionar(produto);
@@ -83,5 +82,15 @@ public class ListaProdutoDAO extends DAO {
         ContentValues dadosProduto = getDadosProduto(produto);
 
         db.insert("listaProdutos", null, dadosProduto);
+    }
+
+    public void editar(Produto produto) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues dadosProduto = getDadosProduto(produto);
+
+        String[] whereArgs = {String.valueOf(produto.getCodigo()), String.valueOf(lista.getCodigo())};
+
+        db.update("listaProdutos", dadosProduto, "produto = ? and lista = ?", whereArgs);
     }
 }

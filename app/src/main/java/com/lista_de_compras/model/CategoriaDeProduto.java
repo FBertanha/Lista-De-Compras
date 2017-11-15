@@ -10,6 +10,14 @@ public class CategoriaDeProduto implements Serializable{
     private Integer codigo;
     private String nome;
 
+    public CategoriaDeProduto() {
+    }
+
+    public CategoriaDeProduto(Integer codigo, String nome) {
+        this.codigo = codigo;
+        this.nome = nome;
+    }
+
     public Integer getCodigo() {
         return codigo;
     }

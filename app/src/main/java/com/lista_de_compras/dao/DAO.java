@@ -21,45 +21,56 @@ public class DAO extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql;
         //Produtos
-        sql = "CREATE TABLE produtos (" +
+        db.execSQL("CREATE TABLE produtos (" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "descricao VARCHAR(255) NOT NULL," +
-                "categoria INT NOT NULL," +
-                "valor DOUBLE);";
-        db.execSQL(sql);
-
+                "categoria INT DEFAULT 1," +
+                "valor DOUBLE DEFAULT 0);"
+        );
         //Categoria de Produto
-        sql = "CREATE TABLE categoriaDeProduto(" +
+        db.execSQL("CREATE TABLE categoriaDeProduto(" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "nome VARCHAR (255) NOT NULL)";
-        db.execSQL(sql);
-
-
+                "nome VARCHAR (255) NOT NULL)"
+        );
         //Listas
-        sql = "CREATE TABLE listas (" +
+        db.execSQL("CREATE TABLE listas (" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "categoria INT NOT NULL," +
+                "categoria INT DEFAULT 1," +
                 //"produtos INT  NOT NULL," +
                 "nome VARCHAR(255) NOT NULL," +
                 "dataCriacao DATE ," +
-                "dataCompra DATE );";
-        db.execSQL(sql);
-
+                "dataCompra DATE );"
+        );
         //Categoria de Lista
-        sql = "CREATE TABLE CategoriaDeLista(" +
+        db.execSQL("CREATE TABLE CategoriaDeLista(" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "nome VARCHAR(255) NOT NULL)";
-
-        db.execSQL(sql);
-
+                "nome VARCHAR(255) NOT NULL)"
+        );
         //Lista-Produtos
-        sql = "CREATE TABLE listaProdutos (" +
+        db.execSQL("CREATE TABLE listaProdutos (" +
                 "codigo INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "produto INT NOT NULL," +
                 "lista INT NOT NULL," +
-                "selecionado INT DEFAULT 0);";
-        db.execSQL(sql);
+                "selecionado INT DEFAULT 0);"
+        );
 
+        incluirRegistrosPadroes(db);
+    }
+
+    private void incluirRegistrosPadroes(SQLiteDatabase db) {
+
+        db.execSQL("INSERT INTO categoriaDeProduto (nome) VALUES " +
+                "('Nenhuma'), " +
+                "('Alimentação'), " +
+                "('Eletrônicos')," +
+                "('Bebidas')," +
+                "('Higiene e Limpeza')");
+
+        db.execSQL("INSERT INTO CategoriaDeLista (nome) VALUES " +
+                "('Nenhuma'), " +
+                "('Festa'), " +
+                "('Compras')," +
+                "('Aniversário')");
     }
 
     @Override
