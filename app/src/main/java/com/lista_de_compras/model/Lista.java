@@ -75,4 +75,34 @@ public class Lista implements Serializable {
     public void setDataCompra(Date dataCompra) {
         this.dataCompra = dataCompra;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lista lista = (Lista) o;
+
+        if (codigo != null ? !codigo.equals(lista.codigo) : lista.codigo != null) return false;
+        if (categoria != null ? !categoria.equals(lista.categoria) : lista.categoria != null)
+            return false;
+        if (produtos != null ? !produtos.equals(lista.produtos) : lista.produtos != null)
+            return false;
+        if (nome != null ? !nome.equals(lista.nome) : lista.nome != null) return false;
+        if (dataCriacao != null ? !dataCriacao.equals(lista.dataCriacao) : lista.dataCriacao != null)
+            return false;
+        return dataCompra != null ? dataCompra.equals(lista.dataCompra) : lista.dataCompra == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = codigo != null ? codigo.hashCode() : 0;
+        result = 31 * result + (categoria != null ? categoria.hashCode() : 0);
+        result = 31 * result + (produtos != null ? produtos.hashCode() : 0);
+        result = 31 * result + (nome != null ? nome.hashCode() : 0);
+        result = 31 * result + (dataCriacao != null ? dataCriacao.hashCode() : 0);
+        result = 31 * result + (dataCompra != null ? dataCompra.hashCode() : 0);
+        return result;
+    }
 }

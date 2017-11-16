@@ -15,6 +15,7 @@ import java.util.List;
  */
 
 public class ProdutoDAO extends DAO {
+    public static final int ERR_PRODUTO_EM_USO = 1;
     private Context context;
 
     public ProdutoDAO(Context context) {
@@ -39,12 +40,33 @@ public class ProdutoDAO extends DAO {
         db.update("produtos", dadosProduto, "codigo = ?", whereArgs);
     }
 
-    public void excluir(int codigo) {
+    public int excluir(Produto produto) {
+
+        if (verificarProdutoEmUso(produto)) {
+            return ERR_PRODUTO_EM_USO;
+        }
+        
         SQLiteDatabase db = getWritableDatabase();
 
-        String[] whereArgs = new String[]{String.valueOf(codigo)};
+        String[] whereArgs = new String[]{String.valueOf(produto.getCodigo())};
 
         db.delete("produtos", "codigo = ?", whereArgs);
+
+        return 0;
+    }
+
+    private boolean verificarProdutoEmUso(Produto produto) {
+        boolean ret;
+        String sql = "SELECT count(*) FROM listaProdutos WHERE produto = ?";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] selectionArgs = new String[]{String.valueOf(produto.getCodigo())};
+
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        cursor.moveToNext();
+        ret = cursor.getInt(0) > 0;
+        cursor.close();
+        return ret;
     }
 
     public List<Produto> todos() {

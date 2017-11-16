@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 
 public class CategoriaDeLista implements Serializable {
-    private int codigo;
+    private Integer codigo;
     private String nome;
 
     public CategoriaDeLista() {
@@ -18,11 +18,11 @@ public class CategoriaDeLista implements Serializable {
         this.nome = nome;
     }
 
-    public int getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -37,5 +37,24 @@ public class CategoriaDeLista implements Serializable {
     @Override
     public String toString() {
         return nome;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CategoriaDeLista that = (CategoriaDeLista) o;
+
+        if (codigo != null ? !codigo.equals(that.codigo) : that.codigo != null) return false;
+        return nome != null ? nome.equals(that.nome) : that.nome == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = codigo != null ? codigo.hashCode() : 0;
+        result = 31 * result + (nome != null ? nome.hashCode() : 0);
+        return result;
     }
 }

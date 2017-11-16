@@ -1,21 +1,17 @@
 package com.lista_de_compras.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lista_de_compras.R;
@@ -71,7 +67,7 @@ public class ProdutoActivity extends AppCompatActivity {
         //Pega produto selecionado
         final Produto produto = (Produto) listViewProdutos.getItemAtPosition(info.position);
 
-        MenuItem menuEditar = menu.add(R.string.menu_activity_produto_editar);
+        MenuItem menuEditar = menu.add(R.string.editar);
         menuEditar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -83,24 +79,26 @@ public class ProdutoActivity extends AppCompatActivity {
         });
 
         //Monta menu de contexto
-        MenuItem menuExcluir = menu.add(R.string.menu_activity_produto_excluir);
+        MenuItem menuExcluir = menu.add(R.string.excluir);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 //Monta uma dialogo de confirmação, sim/não
 
                 new AlertDialog.Builder(ProdutoActivity.this)
-                        .setTitle(R.string.menu_activity_produto_excluir)
+                        .setTitle(R.string.confirmar_exclusao)
                         .setMessage(R.string.menu_activity_produto_excluir_mensagem)
-                        //.setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new ProdutoDAO(ProdutoActivity.this).excluir(produto.getCodigo());
+                                int result = new ProdutoDAO(ProdutoActivity.this).excluir(produto);
+                                if (result == ProdutoDAO.ERR_PRODUTO_EM_USO) {
+                                    montarDialogAviso(getResources().getString(R.string.err_produto_em_uso), getResources().getString(R.string.err_produto_em_uso_mensagem));
+                                }
                                 carregarProdutosNoListView();
                             }
                         })
-                        .setNegativeButton(android.R.string.no, null)
+                        .setNegativeButton(R.string.cancelar, null)
                         .show();
                 return true;
             }
@@ -108,13 +106,27 @@ public class ProdutoActivity extends AppCompatActivity {
 
     }
 
+    private void montarDialogAviso(String titulo, String mensagem) {
+        new AlertDialog.Builder(ProdutoActivity.this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        new CategoriaDeProdutoDAO(CategoriaDeProdutoActivity.this).excluir(categoriaDeProduto);
+//                        carregarCategoriasNoListView();
+//                    }
+//                })
+                .setNegativeButton(android.R.string.ok, null)
+                .show();
+    }
+
     private void carregarProdutosNoListView() {
         ProdutoDAO produtoDAO = new ProdutoDAO(this);
         List<Produto> todosProdutos = produtoDAO.todos();
 
         ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
-        //ArrayAdapter<Produto> produtoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todosProdutos);
-
 
         listViewProdutos.setAdapter(produtoAdapter);
     }

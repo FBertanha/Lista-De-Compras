@@ -21,7 +21,6 @@ import android.widget.ListView;
 import com.lista_de_compras.R;
 import com.lista_de_compras.adapter.ListaAdapter;
 import com.lista_de_compras.dao.ListaDAO;
-import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.Lista;
 
 import java.util.List;
@@ -105,8 +104,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_menu_categoria_produtos) {
             Intent intent = new Intent(this, CategoriaDeProdutoActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_menu_categoria_listas) {
+            Intent intent = new Intent(this, CategoriaDeListaActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
@@ -150,20 +150,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         //Monta menu de contexto
-        MenuItem menuExcluir = menu.add(R.string.menu_activity_produto_excluir);
+        MenuItem menuExcluir = menu.add(R.string.excluir);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 //Monta uma dialogo de confirmação, sim/não
 
                 new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.menu_activity_produto_excluir)
+                        .setTitle(R.string.excluir)
                         .setMessage(R.string.menu_activity_produto_excluir_mensagem)
                         //.setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new ProdutoDAO(MainActivity.this).excluir(lista.getCodigo());
+                                //new ProdutoDAO(MainActivity.this).excluir(lista);
                                 carregarProdutosNoListView();
                             }
                         })

@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:ems="10"
             android:hint="Descrição"
-            android:inputType="textPersonName" />
+            android:inputType="textCapWords" />
     </android.support.design.widget.TextInputLayout>
 
     <Spinner
@@ -35,8 +35,7 @@
         android:layout_alignRight="@+id/textInputLayout"
         android:layout_alignStart="@+id/textInputLayout"
         android:layout_below="@+id/textInputLayout"
-        android:layout_marginTop="15dp"
-        />
+        android:layout_marginTop="30dp" />
 
 
     <android.support.design.widget.TextInputLayout
@@ -61,5 +60,17 @@
             android:hint="Valor"
             android:inputType="numberDecimal" />
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textInputLayout"
+        android:layout_alignStart="@+id/textInputLayout"
+        android:layout_below="@+id/textInputLayout"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="10dp"
+        android:text="Categoria"
+        android:textSize="12sp" />
 
 </RelativeLayout>

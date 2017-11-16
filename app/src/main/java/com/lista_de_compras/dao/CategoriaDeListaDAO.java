@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lista_de_compras.model.CategoriaDeLista;
 
@@ -15,24 +14,20 @@ import java.util.List;
  * Created by DIogo on 20/09/2017.
  */
 
-public class CategoriaDeListaDAO extends SQLiteOpenHelper {
+public class CategoriaDeListaDAO extends DAO {
 
-    public CategoriaDeListaDAO(Context context){super(context, "lista_de_compras", null, 1);}
+    public static final int ERR_CATEGORIA_EM_USO = 1; //"A categoria não pode ser excluída pois há produtos vinculados à ela";
+    public static final int ERR_CATEGORIA_PADRAO = 2;
 
-    public void onCreate(SQLiteDatabase db){
+    private Context context;
 
-
+    public CategoriaDeListaDAO(Context context) {
+        super(context);
+        this.context = context;
     }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-    }
-
     public void adicionar(CategoriaDeLista categoria){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues dadosCategoriaDeLista = getDadosCategoriaDeLista(categoria);
-
         db.insert("CategoriaDeLista",null,dadosCategoriaDeLista);
 
     }
@@ -47,29 +42,47 @@ public class CategoriaDeListaDAO extends SQLiteOpenHelper {
     }
 
 
-    public void excluir(int codigo) {
+    public int excluir(CategoriaDeLista categoriaDeLista) {
+
+        if (categoriaDeLista.getCodigo().equals(1)) {
+            return ERR_CATEGORIA_PADRAO;
+        }
+
+        if (verificarCategoriaEmUso(categoriaDeLista)) {
+            return ERR_CATEGORIA_EM_USO;
+        }
         SQLiteDatabase db = getWritableDatabase();
 
-        String[] whereArgs = new String[]{String.valueOf(codigo)};
+        String[] whereArgs = new String[]{String.valueOf(categoriaDeLista.getCodigo())};
 
-        db.delete("CategoriaDeLista", "id = ?", whereArgs);
+        db.delete("CategoriaDeLista", "codigo = ?", whereArgs);
+        return 0;
+    }
+
+    private boolean verificarCategoriaEmUso(CategoriaDeLista categoriaDeLista) {
+        boolean ret;
+        String sql = "SELECT count(*) FROM listas WHERE categoria = ?";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] selectionArgs = new String[]{String.valueOf(categoriaDeLista.getCodigo())};
+
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        cursor.moveToNext();
+        ret = cursor.getInt(0) > 0;
+        cursor.close();
+        return ret;
     }
 
     public List<CategoriaDeLista> todos(){
-        List<CategoriaDeLista> categoriaDeListas;
+        List<CategoriaDeLista> categorias;
+        String sql = "SELECT * FROM CategoriaDeLista order by codigo";
+        SQLiteDatabase db = getWritableDatabase();
 
-        //TODO
-        categoriaDeListas = new ArrayList<>();
-        categoriaDeListas.add(new CategoriaDeLista(1, "Festa"));
-        categoriaDeListas.add(new CategoriaDeLista(1, "Teste"));
-        categoriaDeListas.add(new CategoriaDeLista(1, "Teste2"));
-//        String sql = "SELECT * FROM CategoriaDeLista";
-//        SQLiteDatabase db = getWritableDatabase();
-//
-//        Cursor cursor = db.rawQuery(sql,null);
-//
-//        categoriaDeListas = getCategoriaDoCursor(cursor);
-        return categoriaDeListas;
+        Cursor cursor = db.rawQuery(sql, null);
+
+        categorias = getCategoriaDoCursor(cursor);
+        cursor.close();
+        return categorias;
     }
 
 
@@ -94,7 +107,6 @@ public class CategoriaDeListaDAO extends SQLiteOpenHelper {
 
         return dados;
     }
-
 
     public CategoriaDeLista pegarPorCodigo(int codigo) {
         String sql = "SELECT * FROM categoriaDeLista WHERE codigo = ?";

@@ -8,8 +8,21 @@
     <string name="title_activity_produto">Produtos</string>
     <string name="title_activity_produto_cadastro">Cadastro de Produto</string>
     <string name="menu_activity_produto_editar">Editar</string>
-    <string name="menu_activity_produto_excluir">Excluir</string>
+    <string name="excluir">Excluir</string>
     <string name="menu_activity_produto_excluir_mensagem">Deseja realmente excluir o produto selecionado?</string>
     <string name="title_activity_categoria_de_produto">Categorias de Produto</string>
     <string name="title_activity_lista_detalhes">ListaDetalhesActivity</string>
+    <string name="confirmar_exclusao">Confirmar exclusão</string>
+    <string name="err_categoria_em_uso_mensagem">Não foi possível apagar a categoria selecionada pois ha produto(s) vinculado(s) à ela!</string>
+    <string name="err_categoria_em_uso">Categoria em uso</string>
+    <string name="err_categoria_padrao_mensagem">Categoria padrão do sistema, impossível apagar!</string>
+    <string name="err_categoria_padrao">Categoria padrão</string>
+    <string name="salvar">Salvar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="title_activity_categoria_de_lista">Categorias de Lista</string>
+    <string name="confirmar_exclusao_categoria_mensagem">Deseja realmente excluir a categoria selecionada?</string>
+    <string name="editar">Editar</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="err_produto_em_uso">Produto em uso</string>
+    <string name="err_produto_em_uso_mensagem">Não foi possível apagar o produto selecionado pois ha listas(s) vinculada(s) à ele!</string>
 </resources>

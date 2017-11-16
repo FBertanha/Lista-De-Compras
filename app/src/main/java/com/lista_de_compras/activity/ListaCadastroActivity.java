@@ -278,7 +278,7 @@ public class ListaCadastroActivity extends AppCompatActivity {
         final Produto produto = (Produto) listViewListaProdutos.getItemAtPosition(info.position);
 
         //Monta menu de contexto
-        MenuItem menuExcluir = menu.add(R.string.menu_activity_produto_excluir);
+        MenuItem menuExcluir = menu.add(R.string.excluir);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

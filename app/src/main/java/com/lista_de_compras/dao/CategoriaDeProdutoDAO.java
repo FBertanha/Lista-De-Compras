@@ -16,11 +16,15 @@ import java.util.List;
 
 public class CategoriaDeProdutoDAO extends DAO {
 
+    public static final int ERR_CATEGORIA_EM_USO = 1; //"A categoria não pode ser excluída pois há produtos vinculados à ela";
+    public static final int ERR_CATEGORIA_PADRAO = 2;
+
+    private Context context;
+
     public CategoriaDeProdutoDAO(Context context){
         super(context);
+        this.context = context;
     }
-
-
 
     //métodos CRUD
 
@@ -38,16 +42,42 @@ public class CategoriaDeProdutoDAO extends DAO {
         db.update("categoriaDeProduto", dadosCategoriaDeProduto, "codigo = ?", whereArgs);
     }
 
-    public void excluir(CategoriaDeProduto categoriaDeProduto){
+    public int excluir(CategoriaDeProduto categoriaDeProduto) {
+
+        if (categoriaDeProduto.getCodigo().equals(1)) {
+            return ERR_CATEGORIA_PADRAO;
+        }
+
+        if (verificarCategoriaEmUso(categoriaDeProduto)) {
+            return ERR_CATEGORIA_EM_USO;
+        }
         SQLiteDatabase db = getWritableDatabase();
         String[] whereArgs = new String[]{String.valueOf(categoriaDeProduto.getCodigo())};
 
         db.delete("categoriaDeProduto","codigo = ?", whereArgs);
+        return 0;
+
+    }
+
+    private boolean verificarCategoriaEmUso(CategoriaDeProduto categoriaDeProduto) {
+        boolean ret;
+        String sql = "SELECT count(*) FROM produtos WHERE categoria = ?";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] selectionArgs = new String[]{String.valueOf(categoriaDeProduto.getCodigo())};
+
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+        cursor.moveToNext();
+        ret = cursor.getInt(0) > 0;
+        cursor.close();
+        return ret;
+
+
     }
 
     public List<CategoriaDeProduto> todos(){
         List<CategoriaDeProduto> categorias;
-        String sql = "SELECT * FROM categoriaDeProduto order by nome";
+        String sql = "SELECT * FROM categoriaDeProduto order by codigo";
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor cursor = db.rawQuery(sql, null);

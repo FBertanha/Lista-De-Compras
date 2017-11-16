@@ -50,12 +50,12 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
     private void carregarProdutoNoFormulario() {
         editTextDescricao.setText(produto.getDescricao());
         editTextValor.setText(String.valueOf(produto.getValor()));
-        spinnerCategoria.setSelection(((ArrayAdapter)spinnerCategoria.getAdapter()).getPosition(produto.getCategoria().getNome()));
+        spinnerCategoria.setSelection(((ArrayAdapter) spinnerCategoria.getAdapter()).getPosition(produto.getCategoria()));
     }
 
     private void pegarProdutoDoFormulario() {
         produto.setDescricao(editTextDescricao.getText().toString());
-        produto.setValor(Double.parseDouble(editTextValor.getText().toString()));
+        produto.setValor(Double.parseDouble(editTextValor.getText().toString().equals("") ? "0" : editTextValor.getText().toString()));
         produto.setCategoria((CategoriaDeProduto) spinnerCategoria.getSelectedItem());
     }
 
@@ -78,6 +78,7 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         editTextDescricao = (EditText) findViewById(R.id.editText_descricao);
         editTextValor = (EditText) findViewById(R.id.editText_valor);
         spinnerCategoria = (Spinner) findViewById(R.id.spinner_lista_categoria);
+
         List<CategoriaDeProduto> categoriasDeProdutos = new CategoriaDeProdutoDAO(this).todos();
         ArrayAdapter<CategoriaDeProduto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriasDeProdutos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

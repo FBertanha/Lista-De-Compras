@@ -95,20 +95,20 @@ public class ListaDetalhesActivity extends AppCompatActivity {
         });
 
         //Monta menu de contexto
-        MenuItem menuExcluir = menu.add(R.string.menu_activity_produto_excluir);
+        MenuItem menuExcluir = menu.add(R.string.excluir);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 //Monta uma dialogo de confirmação, sim/não
 
                 new AlertDialog.Builder(ListaDetalhesActivity.this)
-                        .setTitle(R.string.menu_activity_produto_excluir)
+                        .setTitle(R.string.excluir)
                         .setMessage(R.string.menu_activity_produto_excluir_mensagem)
                         //.setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new ProdutoDAO(ListaDetalhesActivity.this).excluir(produto.getCodigo());
+                                new ProdutoDAO(ListaDetalhesActivity.this).excluir(produto);
                                 carregarProdutosNoListView();
                             }
                         })

@@ -30,7 +30,10 @@
             android:name=".activity.CategoriaDeProdutoActivity"
             android:label="@string/title_activity_categoria_de_produto"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.CategoriaDeProdutoCadastroActivity" />
+        <activity
+            android:name=".activity.CategoriaDeListaActivity"
+            android:label="@string/title_activity_categoria_de_lista"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ListaDetalhesActivity"
             android:label="@string/title_activity_lista_detalhes"
