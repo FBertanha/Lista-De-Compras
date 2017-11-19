@@ -26,8 +26,8 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
     private EditText editTextDescricao;
     private EditText editTextValor;
     private Spinner spinnerCategoria;
-    private Produto produto;
 
+    private Produto produto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,12 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
             produto = new Produto();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 
     private void carregarProdutoNoFormulario() {
         editTextDescricao.setText(produto.getDescricao());
@@ -66,10 +72,14 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         if(produto.getCodigo() != null) {
             produtoDAO.editar(produto);
         } else {
-            produtoDAO.adicionar(produto);
+            produto.setCodigo(produtoDAO.adicionar(produto).intValue());
         }
 
         Toast.makeText(this, "Produto salvo com sucesso!", Toast.LENGTH_SHORT).show();
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("produto", produto);
+        setResult(RESULT_OK, returnIntent);
 
         finish();
     }
@@ -79,6 +89,10 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         editTextValor = (EditText) findViewById(R.id.editText_valor);
         spinnerCategoria = (Spinner) findViewById(R.id.spinner_lista_categoria);
 
+        configurarSpinner();
+    }
+
+    private void configurarSpinner() {
         List<CategoriaDeProduto> categoriasDeProdutos = new CategoriaDeProdutoDAO(this).todos();
         ArrayAdapter<CategoriaDeProduto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriasDeProdutos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -59,18 +59,18 @@ public class DAO extends SQLiteOpenHelper {
 
     private void incluirRegistrosPadroes(SQLiteDatabase db) {
 
-        db.execSQL("INSERT INTO categoriaDeProduto (nome) VALUES " +
-                "('Nenhuma'), " +
-                "('Alimentação'), " +
-                "('Eletrônicos')," +
-                "('Bebidas')," +
-                "('Higiene e Limpeza')");
+        db.execSQL("INSERT INTO categoriaDeProduto (codigo, nome) VALUES " +
+                "(1, 'Sem categoria'), " +
+                "(2, 'Alimentação'), " +
+                "(3, 'Eletrônicos')," +
+                "(4, 'Bebidas')," +
+                "(5, 'Higiene e Limpeza')");
 
-        db.execSQL("INSERT INTO CategoriaDeLista (nome) VALUES " +
-                "('Nenhuma'), " +
-                "('Festa'), " +
-                "('Compras')," +
-                "('Aniversário')");
+        db.execSQL("INSERT INTO CategoriaDeLista (codigo, nome) VALUES " +
+                "(1, 'Sem categoria'), " +
+                "(2, 'Festa'), " +
+                "(3, 'Compras')," +
+                "(4, 'Aniversário')");
     }
 
     @Override

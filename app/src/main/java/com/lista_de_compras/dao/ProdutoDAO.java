@@ -23,7 +23,7 @@ public class ProdutoDAO extends DAO {
         this.context = context;
     }
 
-    public long adicionar(Produto produto) {
+    public Long adicionar(Produto produto) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues dadosProduto = getDadosProduto(produto);
@@ -45,7 +45,7 @@ public class ProdutoDAO extends DAO {
         if (verificarProdutoEmUso(produto)) {
             return ERR_PRODUTO_EM_USO;
         }
-        
+
         SQLiteDatabase db = getWritableDatabase();
 
         String[] whereArgs = new String[]{String.valueOf(produto.getCodigo())};
@@ -72,7 +72,7 @@ public class ProdutoDAO extends DAO {
     public List<Produto> todos() {
         List<Produto> produtos;
 
-        String sql = "SELECT * FROM produtos order by descricao";
+        String sql = "SELECT * FROM produtos order by categoria, descricao";
 
         SQLiteDatabase db = getWritableDatabase();
 

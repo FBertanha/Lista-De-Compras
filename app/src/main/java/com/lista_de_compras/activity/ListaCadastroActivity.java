@@ -2,6 +2,7 @@ package com.lista_de_compras.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.view.ContextMenu;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.lista_de_compras.R;
 import com.lista_de_compras.adapter.ProdutoAdapter;
 import com.lista_de_compras.dao.CategoriaDeListaDAO;
-import com.lista_de_compras.dao.CategoriaDeProdutoDAO;
 import com.lista_de_compras.dao.ListaDAO;
 import com.lista_de_compras.dao.ProdutoDAO;
 import com.lista_de_compras.model.CategoriaDeLista;
@@ -34,19 +33,15 @@ import java.util.List;
 
 public class ListaCadastroActivity extends AppCompatActivity {
 
-    private static final String TAG = "ListaCadastroActivity";
+    public static final int PRODUTO_SALVO = 1;
+    private final String TAG = getClass().getSimpleName();
 
-    private CheckBox checkBoxListaProdutoSelecionado;
     private EditText editTextListaNome;
     private Spinner spinnerListaCategoria;
     private AutoCompleteTextView autoCompleteTextViewListaProduto;
     private ListView listViewListaProdutos;
 
-
     private Lista lista;
-    private Produto produto;
-    private List<Produto> listaDeProdutos = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,53 +60,45 @@ public class ListaCadastroActivity extends AppCompatActivity {
             carregarListaNoFormulario();
         } else {
             lista = new Lista();
+            //lista.setCategoria(new CategoriaDeLista());
+            lista.setProdutos(new ArrayList<Produto>());
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        carregarTodosProdutos();
-
+        carregarProdutosDaListaNoListView();
     }
 
-    private void carregarTodosProdutos() {
-        //Traz todos produtos
-        //listaDeProdutos = new ListaProdutoDAO(ListaCadastroActivity.this, lista).pegarProdutos();
-    }
 
     private void carregarListaNoFormulario() {
         editTextListaNome.setText(lista.getNome());
-        spinnerListaCategoria.setSelection(((ArrayAdapter) spinnerListaCategoria.getAdapter()).getPosition(lista.getCategoria().getNome()));
-        lista.setProdutos(lista.getProdutos());
-
+        spinnerListaCategoria.setSelection(((ArrayAdapter) spinnerListaCategoria.getAdapter()).getPosition(lista.getCategoria()));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.activity_cadastro_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+    private void pegarListaDoFormulario() {
+        lista.setNome(editTextListaNome.getText().toString());
+        lista.setCategoria((CategoriaDeLista) spinnerListaCategoria.getSelectedItem());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.salvar_cadastro_menu:
-                salvar();
-                break;
+    private boolean validarCampos() {
+        if (lista.getNome().isEmpty()) {
+            montarDialogAviso(getString(R.string.campos_em_branco), "Preencha a descricao da lista!");
+            return false;
         }
-        return super.onOptionsItemSelected(item);
+        if (lista.getProdutos().isEmpty()) {
+            montarDialogAviso(getString(R.string.campos_em_branco), "A lista não tem produtos!");
+            return false;
+        }
+        return true;
     }
 
     private void salvar() {
-        ListaDAO listaDAO = new ListaDAO(this);
         pegarListaDoFormulario();
+        if (!validarCampos()) return;
+
+        ListaDAO listaDAO = new ListaDAO(this);
         //Se o produto ja tiver um código (diferente de zero) ele está sendo editado, caso contrário é um produto novo
         if (lista.getCodigo() != null) {
             listaDAO.editar(lista);
@@ -122,58 +109,34 @@ public class ListaCadastroActivity extends AppCompatActivity {
         Toast.makeText(this, "Lista salva com sucesso!", Toast.LENGTH_SHORT).show();
 
         finish();
-
     }
 
-    private void pegarListaDoFormulario() {
-        lista.setNome(editTextListaNome.getText().toString());
-        lista.setCategoria((CategoriaDeLista) spinnerListaCategoria.getSelectedItem());
-        lista.setProdutos(listaDeProdutos);
-
+    private void adicionarProdutoNaLista(Produto produto) {
+        lista.getProdutos().add(produto);
+        carregarProdutosDaListaNoListView();
     }
 
-    private void adicionarProdutoNaLista() {
-        listaDeProdutos.add(produto);
-        //produto = new Produto();
-        autoCompleteTextViewListaProduto.setText("");
-        carregarProdutosNoListView();
+    private void removerProdutoDaLista(Produto produto) {
+        lista.getProdutos().remove(produto);
+        carregarProdutosDaListaNoListView();
     }
 
-    private void carregarProdutosNoListView() {
+    private void carregarProdutosDaListaNoListView() {
+        List<Produto> produtosDaLista = lista.getProdutos();
 
-
-        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, listaDeProdutos);
-        //ArrayAdapter<Produto> produtoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todosProdutos);
-
-
+        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, produtosDaLista);
         listViewListaProdutos.setAdapter(produtoAdapter);
-
     }
 
 
     private void configurarSupportActionBar() {
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
     }
 
-//    private void carregarListasNoListView() {
-//        ProdutoDAO produtoDAO = new ProdutoDAO(this);
-//        List<Produto> todosProdutos = produtoDAO.todos();
-//
-//        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
-//        //ArrayAdapter<Produto> produtoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todosProdutos);
-//
-//
-//        listViewListaProdutos.setAdapter(produtoAdapter);
-//    }
-
     private void carregarViewComponents() {
-        checkBoxListaProdutoSelecionado = (CheckBox) findViewById(R.id.checkbox_lista_produto_selecionado);
         editTextListaNome = (EditText) findViewById(R.id.editText_lista_nome);
         spinnerListaCategoria = (Spinner) findViewById(R.id.spinner_lista_categoria);
         autoCompleteTextViewListaProduto = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_lista_produto);
@@ -183,21 +146,21 @@ public class ListaCadastroActivity extends AppCompatActivity {
         configurarAutoCompleteTextView();
     }
 
-//    private void configurarCheckbox() {
-//        listViewListaProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                CheckBox chk = (CheckBox) view.findViewById(R.id.checkbox_lista_produto_selecionado);
-//                chk.setChecked(!chk.isChecked());
-//
-//                Produto produto = (Produto) chk.getTag();
-//                produto.setSelecionado(chk.isChecked());
-//
-//                ListaProdutoDAO listaProdutoDAO = new ListaProdutoDAO(ListaCadastroActivity.this, lista);
-//                listaProdutoDAO.editar(produto);
-//            }
-//        });
-//    }
+    private void montarDialogAviso(String titulo, String mensagem) {
+        new AlertDialog.Builder(ListaCadastroActivity.this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        new CategoriaDeProdutoDAO(CategoriaDeProdutoActivity.this).excluir(categoriaDeProduto);
+//                        carregarCategoriasNoListView();
+//                    }
+//                })
+                .setNegativeButton(android.R.string.ok, null)
+                .show();
+    }
 
     private void configurarSpinner() {
         List<CategoriaDeLista> categoriasDeLista = new CategoriaDeListaDAO(this).todos();
@@ -228,36 +191,28 @@ public class ListaCadastroActivity extends AppCompatActivity {
         autoCompleteTextViewListaProduto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                produto = (Produto) adapter.getItem(position);
-                adicionarProdutoNaLista();
+                Produto produto = (Produto) adapter.getItem(position);
+                adicionarProdutoNaLista(produto);
+
+                autoCompleteTextViewListaProduto.setText("");
             }
         });
 
         autoCompleteTextViewListaProduto.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View arg0, int keyCode, KeyEvent event) {
-                //This is the filter
                 if (event.getAction() != KeyEvent.ACTION_DOWN) {
                     return false;
                 }
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    boolean flagGravar = true;
-                    ProdutoDAO produtoDAO = new ProdutoDAO(ListaCadastroActivity.this);
                     Editable descricao = autoCompleteTextViewListaProduto.getText();
 
-                    for (Produto p :
-                            listaDeProdutos) {
-                        if (p.getDescricao().equals(descricao)) {
-                            flagGravar = false;
-                            break;
-                        }
-                    }
-                    if (flagGravar) {
-                        produto = new Produto(null, descricao.toString(), new CategoriaDeProdutoDAO(ListaCadastroActivity.this).pegarPorCodigo(1), 0, false);
-                        produto.setCodigo(Integer.parseInt(String.valueOf(produtoDAO.adicionar(produto))));
+                    Produto novoProduto = new Produto(null, descricao.toString(), null, 0, false);
 
-                    }
-                    adicionarProdutoNaLista();
+                    adicionarProdutoNaLista(novoProduto);
+
+                    autoCompleteTextViewListaProduto.setText("");
+
                     return true;
                 }
                 return false;
@@ -278,16 +233,59 @@ public class ListaCadastroActivity extends AppCompatActivity {
         final Produto produto = (Produto) listViewListaProdutos.getItemAtPosition(info.position);
 
         //Monta menu de contexto
-        MenuItem menuExcluir = menu.add(R.string.excluir);
+        MenuItem menuExcluir = menu.add(R.string.remover);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //Monta uma dialogo de confirmação, sim/não
-                listaDeProdutos.remove(produto);
-                carregarProdutosNoListView();
+                removerProdutoDaLista(produto);
                 return true;
             }
         });
 
+        //Monta menu de contexto
+        MenuItem menuPreço = menu.add("Editar");
+        menuPreço.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(ListaCadastroActivity.this, ProdutoCadastroActivity.class);
+                intent.putExtra("produto", produto);
+                startActivityForResult(intent, PRODUTO_SALVO);
+                lista.getProdutos().remove(produto);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == PRODUTO_SALVO) {
+            if (resultCode == RESULT_OK) {
+                Produto produto = (Produto) data.getSerializableExtra("produto");
+                //Log.e(TAG, "onActivityResult: " + lista.getProdutos().contains(produto));
+                adicionarProdutoNaLista(produto);
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.activity_cadastro_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.salvar_cadastro_menu:
+                salvar();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

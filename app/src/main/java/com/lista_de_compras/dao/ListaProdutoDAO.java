@@ -69,15 +69,14 @@ public class ListaProdutoDAO extends DAO {
         return dados;
     }
 
-    public void adicionar() {
-        for (Produto produto :
-                lista.getProdutos()) {
-            adicionar(produto);
-        }
-    }
-
-    public void adicionar(Produto produto) {
+    private void adicionar(Produto produto) {
         SQLiteDatabase db = getWritableDatabase();
+
+        //Verifica se produto está cadastrado
+        if (produto.getCodigo() == null) {
+            Long codigoProdutoNovo = new ProdutoDAO(context).adicionar(produto);
+            produto.setCodigo(codigoProdutoNovo.intValue());
+        }
 
         ContentValues dadosProduto = getDadosProduto(produto);
 
@@ -92,5 +91,38 @@ public class ListaProdutoDAO extends DAO {
         String[] whereArgs = {String.valueOf(produto.getCodigo()), String.valueOf(lista.getCodigo())};
 
         db.update("listaProdutos", dadosProduto, "produto = ? and lista = ?", whereArgs);
+    }
+
+    public void excluir(Produto produto) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] whereArgs = {String.valueOf(produto.getCodigo()), String.valueOf(lista.getCodigo())};
+
+        db.delete("listaProdutos", "produto = ? and lista = ?", whereArgs);
+    }
+
+    public void excluirProdutos() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] whereArgs = new String[]{String.valueOf(lista.getCodigo())};
+
+        db.delete("listaProdutos", "lista = ?", whereArgs);
+
+    }
+
+    public void editarProdutos() {
+        excluirProdutos();
+        adicionarProdutos();
+    }
+
+    public void adicionarProdutos() {
+
+        List<Produto> produtosDaLista = lista.getProdutos();
+
+        for (Produto produto : produtosDaLista) {
+            adicionar(produto);
+        }
+
+
     }
 }

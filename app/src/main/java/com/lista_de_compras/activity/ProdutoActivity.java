@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,11 +54,6 @@ public class ProdutoActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -78,13 +72,10 @@ public class ProdutoActivity extends AppCompatActivity {
             }
         });
 
-        //Monta menu de contexto
         MenuItem menuExcluir = menu.add(R.string.excluir);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //Monta uma dialogo de confirmação, sim/não
-
                 new AlertDialog.Builder(ProdutoActivity.this)
                         .setTitle(R.string.confirmar_exclusao)
                         .setMessage(R.string.menu_activity_produto_excluir_mensagem)
@@ -126,7 +117,16 @@ public class ProdutoActivity extends AppCompatActivity {
         ProdutoDAO produtoDAO = new ProdutoDAO(this);
         List<Produto> todosProdutos = produtoDAO.todos();
 
-        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this, todosProdutos);
+        ProdutoAdapter produtoAdapter = new ProdutoAdapter(this);
+        String ultimaCategoria = "";
+
+        for (Produto produto : todosProdutos) {
+            if (!produto.getCategoria().getNome().equals(ultimaCategoria)) {
+                produtoAdapter.addSectionHeaderItem(produto);
+                ultimaCategoria = produto.getCategoria().getNome();
+            }
+            produtoAdapter.addItem(produto);
+        }
 
         listViewProdutos.setAdapter(produtoAdapter);
     }

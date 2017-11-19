@@ -77,7 +77,6 @@ public class Produto implements Serializable {
         Produto produto = (Produto) o;
 
         if (Double.compare(produto.valor, valor) != 0) return false;
-        if (codigo != null ? !codigo.equals(produto.codigo) : produto.codigo != null) return false;
         if (descricao != null ? !descricao.equals(produto.descricao) : produto.descricao != null)
             return false;
         if (categoria != null ? !categoria.equals(produto.categoria) : produto.categoria != null)
@@ -90,8 +89,7 @@ public class Produto implements Serializable {
     public int hashCode() {
         int result;
         long temp;
-        result = codigo != null ? codigo.hashCode() : 0;
-        result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
+        result = descricao != null ? descricao.hashCode() : 0;
         result = 31 * result + (categoria != null ? categoria.hashCode() : 0);
         temp = Double.doubleToLongBits(valor);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

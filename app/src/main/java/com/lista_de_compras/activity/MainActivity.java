@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,30 +26,37 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private String TAG = getClass().getSimpleName();
-    private ListView listViewLista;
+    private ListView listViewListas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         carregarViewComponents();
+        configurarSupportActionBar();
         configurarListView();
+        configurarDrawerLayout();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ListaCadastroActivity.class);
-                //intent.putExtra("lista", lista);
                 startActivity(intent);
             }
         });
 
+    }
+
+    private void configurarSupportActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void configurarDrawerLayout() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, (Toolbar) findViewById(R.id.toolbar), R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -68,37 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_menu_listas) {
-
-        } else if (id == R.id.nav_menu_produtos) {
+        if (id == R.id.nav_menu_produtos) {
             Intent intent = new Intent(this, ProdutoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_menu_categoria_produtos) {
@@ -107,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_menu_categoria_listas) {
             Intent intent = new Intent(this, CategoriaDeListaActivity.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -122,12 +99,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        carregarProdutosNoListView();
+        carregarListasNoListView();
     }
 
     //Obrigatório para onCreateContextMenu
     private void configurarListView() {
-        registerForContextMenu(listViewLista);
+        registerForContextMenu(listViewListas);
     }
 
     @Override
@@ -136,35 +113,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
         //Pega lista selecionado
-        final Lista lista = (Lista) listViewLista.getItemAtPosition(info.position);
+        final Lista lista = (Lista) listViewListas.getItemAtPosition(info.position);
 
-        MenuItem menuEditar = menu.add(R.string.menu_activity_produto_editar);
+        MenuItem menuEditar = menu.add(R.string.editar);
         menuEditar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(MainActivity.this, ListaDetalhesActivity.class);
+                Intent intent = new Intent(MainActivity.this, ListaCadastroActivity.class);
                 intent.putExtra("lista", lista);
                 startActivity(intent);
                 return true;
             }
         });
 
-        //Monta menu de contexto
         MenuItem menuExcluir = menu.add(R.string.excluir);
         menuExcluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //Monta uma dialogo de confirmação, sim/não
-
                 new AlertDialog.Builder(MainActivity.this)
-                        .setTitle(R.string.excluir)
-                        .setMessage(R.string.menu_activity_produto_excluir_mensagem)
-                        //.setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.confirmar_exclusao)
+                        .setMessage(R.string.confirmar_exclusao_lista_mensagem)
+                        .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //new ProdutoDAO(MainActivity.this).excluir(lista);
-                                carregarProdutosNoListView();
+                                new ListaDAO(MainActivity.this).excluir(lista);
+                                carregarListasNoListView();
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)
@@ -175,21 +148,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void carregarProdutosNoListView() {
+    private void carregarListasNoListView() {
         ListaDAO listaDAO = new ListaDAO(this);
         List<Lista> todasListas = listaDAO.todos();
 
         ListaAdapter listaAdapter = new ListaAdapter(this, todasListas);
-        //ArrayAdapter<Produto> listaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, todasListas);
 
-
-        listViewLista.setAdapter(listaAdapter);
+        listViewListas.setAdapter(listaAdapter);
     }
 
     private void carregarViewComponents() {
-        listViewLista = (ListView) findViewById(R.id.listView_listas);
+        listViewListas = (ListView) findViewById(R.id.listView_listas);
 
-        listViewLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewListas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Lista lista = (Lista) parent.getAdapter().getItem(position);

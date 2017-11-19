@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lista_de_compras.model.CategoriaDeLista;
 import com.lista_de_compras.model.Lista;
 
 import java.util.ArrayList;
@@ -31,10 +30,12 @@ public class ListaDAO extends DAO {
 
         ContentValues dadosLista = getDadosLista(lista);
 
-        long codigoLista = db.insert("listas", null, dadosLista);
+        Long codigoLista = db.insert("listas", null, dadosLista);
 
-        lista.setCodigo(Integer.parseInt(String.valueOf(codigoLista)));
-        new ListaProdutoDAO(context, lista).adicionar();
+        //TODO adicionar itens da lista
+        lista.setCodigo(codigoLista.intValue());
+
+        new ListaProdutoDAO(context, lista).adicionarProdutos();
 
     }
 
@@ -45,20 +46,26 @@ public class ListaDAO extends DAO {
         String[] whereArgs = new String[]{String.valueOf(lista.getCodigo())};
 
         db.update("listas", dadosLista, "codigo = ?", whereArgs);
+
+        //TODO apagar itens da lista e adicionar novamente
+        new ListaProdutoDAO(context, lista).editarProdutos();
     }
 
-    public void excluir(int codigo) {
+    public void excluir(Lista lista) {
         SQLiteDatabase db = getWritableDatabase();
 
-        String[] whereArgs = new String[]{String.valueOf(codigo)};
+        String[] whereArgs = new String[]{String.valueOf(lista.getCodigo())};
 
-        db.delete("listas", "id = ?", whereArgs);
+        db.delete("listas", "codigo = ?", whereArgs);
+
+        //TODO apagar itens da lista também
+        new ListaProdutoDAO(context, lista).excluirProdutos();
     }
 
     public List<Lista> todos() {
         List<Lista> listas;
 
-        String sql = "SELECT * FROM listas";
+        String sql = "SELECT * FROM listas order by codigo";
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -77,17 +84,12 @@ public class ListaDAO extends DAO {
             Lista lista = new Lista();
 
             lista.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-            //TODA chave estrangeira CategoriaDeLista
-            // TODO Categoria De lista
-            //lista.setCategoria(new CategoriaDeListaDAO(context).pegarPorCodigo(cursor.getInt(cursor.getColumnIndex("categoria"))));
-            lista.setCategoria(new CategoriaDeLista(1, "Festa"));
-            // TODO
-            lista.setProdutos(new ListaProdutoDAO(context, lista).pegarProdutos());
             lista.setNome(cursor.getString(cursor.getColumnIndex("nome")));
-            // TODO
+            lista.setCategoria(new CategoriaDeListaDAO(context).pegarPorCodigo(cursor.getInt(cursor.getColumnIndex("categoria"))));
+            lista.setProdutos(new ListaProdutoDAO(context, lista).pegarProdutos());
             lista.setDataCriacao(new Date());
             lista.setDataCompra(new Date());
-            //Adiciona produto no ArrayList
+
             listas.add(lista);
         }
         return listas;
@@ -97,16 +99,11 @@ public class ListaDAO extends DAO {
         ContentValues dados = new ContentValues();
 
         dados.put("codigo", lista.getCodigo());
-        //TODO
-        //dados.put("categoria", String.valueOf(lista.getCategoria().getCodigo()));
-        dados.put("categoria", 1);
-        //TODO
-        //dados.put("produtos", String.valueOf(lista.getProdutos()));
+        if (lista.getCategoria() != null)
+            dados.put("categoria", lista.getCategoria().getCodigo());
+        else
+            dados.put("categoria", 1);
         dados.put("nome", lista.getNome());
-        //TODO
-        //dados.put("dataCriacao", String.valueOf(lista.getDataCriacao()));
-        //dados.put("dataCompra", String.valueOf(lista.getDataCompra()));
-
 
         return dados;
 

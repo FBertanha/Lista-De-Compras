@@ -25,4 +25,7 @@
     <string name="confirmar">Confirmar</string>
     <string name="err_produto_em_uso">Produto em uso</string>
     <string name="err_produto_em_uso_mensagem">Não foi possível apagar o produto selecionado pois ha listas(s) vinculada(s) à ele!</string>
+    <string name="confirmar_exclusao_lista_mensagem">Deseja realmente excluir a lista selecionada?</string>
+    <string name="remover">Remover</string>
+    <string name="campos_em_branco">Campo(s) em branco</string>
 </resources>
