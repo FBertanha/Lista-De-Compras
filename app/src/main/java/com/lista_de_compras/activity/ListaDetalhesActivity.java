@@ -1,9 +1,9 @@
 package com.lista_de_compras.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -25,11 +25,13 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ListaDetalhesActivity extends AppCompatActivity {
+    private static final int LISTA_SALVA = 1;
     private CheckBox checkBoxListaProdutoSelecionado;
 
     private Lista lista;
     private ListView listViewListaProdutosDetalhes;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +39,14 @@ public class ListaDetalhesActivity extends AppCompatActivity {
         configurarSupportActionBar();
         carregarViewComponents();
         configurarListView();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(ListaDetalhesActivity.this, ListaCadastroActivity.class);
+                intent.putExtra("lista", lista);
+                startActivityForResult(intent, LISTA_SALVA);
             }
         });
 
@@ -51,7 +55,7 @@ public class ListaDetalhesActivity extends AppCompatActivity {
         lista = (Lista) intent.getSerializableExtra("lista");
 
         if (lista != null) {
-            this.setTitle(lista.getNome() + " - " + lista.getCategoria().getNome());
+            this.setTitle(lista.getNome() + " - " + lista.getCategoria().getNome() + ", R$ " + String.valueOf(lista.getProdutos().stream().mapToDouble(Produto::getValor).sum()));
             carregarProdutosNoListView();
         } else {
             lista = new Lista();
@@ -62,6 +66,20 @@ public class ListaDetalhesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         carregarProdutosNoListView();
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == LISTA_SALVA) {
+            if (resultCode == RESULT_OK) {
+                lista = (Lista) data.getSerializableExtra("lista");
+
+                this.setTitle(lista.getNome() + " - " + lista.getCategoria().getNome() + ", R$ " + String.valueOf(lista.getProdutos().stream().mapToDouble(Produto::getValor).sum()));
+                carregarProdutosNoListView();
+            }
+        }
     }
 
     //Obrigatório para onCreateContextMenu

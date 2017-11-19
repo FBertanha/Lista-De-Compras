@@ -1,5 +1,6 @@
 package com.lista_de_compras.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class ListaAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("NewApi")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         Lista lista = listas.get(position);
@@ -59,7 +61,8 @@ public class ListaAdapter extends BaseAdapter {
 
         nome.setText(lista.getNome());
         categoria.setText(lista.getCategoria().getNome());
-        preco.setText(String.valueOf(lista.getProdutos().stream().mapToDouble(Produto::getValor).sum()));
+        preco.setText(String.valueOf(lista.getProdutos().stream().mapToDouble(p -> p.isSelecionado() ? p.getValor() : 0).sum()) + "/" + String.valueOf(lista.getProdutos().stream().mapToDouble(Produto::getValor).sum()));
+
         // TODO total dos itens
 
         return listaListView;

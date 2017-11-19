@@ -55,7 +55,6 @@ public class ListaCadastroActivity extends AppCompatActivity {
         Intent intent = getIntent();
         lista = (Lista) intent.getSerializableExtra("lista");
 
-
         if (lista != null) {
             carregarListaNoFormulario();
         } else {
@@ -70,7 +69,6 @@ public class ListaCadastroActivity extends AppCompatActivity {
         super.onResume();
         carregarProdutosDaListaNoListView();
     }
-
 
     private void carregarListaNoFormulario() {
         editTextListaNome.setText(lista.getNome());
@@ -103,10 +101,14 @@ public class ListaCadastroActivity extends AppCompatActivity {
         if (lista.getCodigo() != null) {
             listaDAO.editar(lista);
         } else {
-            listaDAO.adicionar(lista);
+            lista.setCodigo(listaDAO.adicionar(lista).intValue());
         }
 
         Toast.makeText(this, "Lista salva com sucesso!", Toast.LENGTH_SHORT).show();
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("lista", lista);
+        setResult(RESULT_OK, returnIntent);
 
         finish();
     }
@@ -150,14 +152,6 @@ public class ListaCadastroActivity extends AppCompatActivity {
         new AlertDialog.Builder(ListaCadastroActivity.this)
                 .setTitle(titulo)
                 .setMessage(mensagem)
-                //.setIcon(android.R.drawable.ic_dialog_alert)
-//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        new CategoriaDeProdutoDAO(CategoriaDeProdutoActivity.this).excluir(categoriaDeProduto);
-//                        carregarCategoriasNoListView();
-//                    }
-//                })
                 .setNegativeButton(android.R.string.ok, null)
                 .show();
     }

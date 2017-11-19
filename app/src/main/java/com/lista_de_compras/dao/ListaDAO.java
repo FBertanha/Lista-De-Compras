@@ -25,7 +25,7 @@ public class ListaDAO extends DAO {
     }
 
 
-    public void adicionar(Lista lista) {
+    public Long adicionar(Lista lista) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues dadosLista = getDadosLista(lista);
@@ -36,6 +36,7 @@ public class ListaDAO extends DAO {
         lista.setCodigo(codigoLista.intValue());
 
         new ListaProdutoDAO(context, lista).adicionarProdutos();
+        return codigoLista;
 
     }
 

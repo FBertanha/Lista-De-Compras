@@ -2,6 +2,7 @@ package com.lista_de_compras.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,8 +67,10 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
     }
 
     private void salvar() {
-        ProdutoDAO produtoDAO = new ProdutoDAO(this);
         pegarProdutoDoFormulario();
+        if (!validarCampos()) return;
+
+        ProdutoDAO produtoDAO = new ProdutoDAO(this);
         //Se o produto ja tiver um código (diferente de zero) ele está sendo editado, caso contrário é um produto novo
         if(produto.getCodigo() != null) {
             produtoDAO.editar(produto);
@@ -82,6 +85,26 @@ public class ProdutoCadastroActivity extends AppCompatActivity {
         setResult(RESULT_OK, returnIntent);
 
         finish();
+    }
+
+    private boolean validarCampos() {
+        if (produto.getDescricao().isEmpty()) {
+            montarDialogAviso(getString(R.string.campos_em_branco), "Preencha a descricao do produto!");
+            return false;
+        }
+        if (produto.getValor() < 0) {
+            montarDialogAviso(getString(R.string.campos_em_branco), "Digite um valor válido para o produto!");
+            return false;
+        }
+        return true;
+    }
+
+    private void montarDialogAviso(String titulo, String mensagem) {
+        new AlertDialog.Builder(ProdutoCadastroActivity.this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setNegativeButton(android.R.string.ok, null)
+                .show();
     }
 
     private void carregarViewComponents() {
