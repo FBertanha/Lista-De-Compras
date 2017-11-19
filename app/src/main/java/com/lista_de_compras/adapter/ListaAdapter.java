@@ -63,8 +63,6 @@ public class ListaAdapter extends BaseAdapter {
         categoria.setText(lista.getCategoria().getNome());
         preco.setText(String.valueOf(lista.getProdutos().stream().mapToDouble(p -> p.isSelecionado() ? p.getValor() : 0).sum()) + "/" + String.valueOf(lista.getProdutos().stream().mapToDouble(Produto::getValor).sum()));
 
-        // TODO total dos itens
-
         return listaListView;
     }
 }

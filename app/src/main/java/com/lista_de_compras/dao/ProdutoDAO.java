@@ -113,18 +113,4 @@ public class ProdutoDAO extends DAO {
         return dados;
     }
 
-
-//    public Produto pegarPorDescricao(String descricao) {
-//        //TODO
-//        String[] whereArgs = new String[]{descricao};
-//        String sql = "SELECT count(*) FROM produtos where descricao = ?";
-//
-//        SQLiteDatabase db = getWritableDatabase();
-//
-//        Cursor cursor = db.rawQuery(sql, null);
-//
-//        produtos = getProdutosDoCursor(cursor);
-//
-//        return produtos;
-//    }
 }

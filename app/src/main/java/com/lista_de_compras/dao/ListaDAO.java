@@ -32,7 +32,6 @@ public class ListaDAO extends DAO {
 
         Long codigoLista = db.insert("listas", null, dadosLista);
 
-        //TODO adicionar itens da lista
         lista.setCodigo(codigoLista.intValue());
 
         new ListaProdutoDAO(context, lista).adicionarProdutos();
@@ -48,7 +47,6 @@ public class ListaDAO extends DAO {
 
         db.update("listas", dadosLista, "codigo = ?", whereArgs);
 
-        //TODO apagar itens da lista e adicionar novamente
         new ListaProdutoDAO(context, lista).editarProdutos();
     }
 
@@ -59,7 +57,6 @@ public class ListaDAO extends DAO {
 
         db.delete("listas", "codigo = ?", whereArgs);
 
-        //TODO apagar itens da lista também
         new ListaProdutoDAO(context, lista).excluirProdutos();
     }
 
