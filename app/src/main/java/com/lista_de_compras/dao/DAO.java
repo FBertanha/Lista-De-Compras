@@ -61,16 +61,20 @@ public class DAO extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO categoriaDeProduto (codigo, nome) VALUES " +
                 "(1, 'Sem categoria'), " +
-                "(2, 'Alimentação'), " +
-                "(3, 'Eletrônicos')," +
-                "(4, 'Bebidas')," +
-                "(5, 'Higiene e Limpeza')");
+                "(2, 'Açougue'), " +
+                "(3, 'Bebidas')," +
+                "(4, 'Carnes')," +
+                "(5, 'Frios')," +
+                "(6, 'Higiene')," +
+                "(7, 'Horti Fruti')," +
+                "(8, 'Limpeza')," +
+                "(9, 'Padaria')");
 
         db.execSQL("INSERT INTO CategoriaDeLista (codigo, nome) VALUES " +
                 "(1, 'Sem categoria'), " +
-                "(2, 'Festa'), " +
+                "(2, 'Aniversário'), " +
                 "(3, 'Compras')," +
-                "(4, 'Aniversário')");
+                "(4, 'Festa')");
     }
 
     @Override
